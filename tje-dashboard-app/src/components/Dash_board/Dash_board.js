@@ -1,9 +1,14 @@
-function Dash_board() {
+import { Link } from "react-router-dom";
+
+function DASH_BOARD() {
   return (
     <div style={{ textAlign: "center" }}>
-      <h1>Overall Dashboard</h1>
+      <h1>Dashboard</h1>
+      <Link to="/">Home</Link>
+      <span style={{ margin: "0 10px" }}>|</span>
+      <Link to="/class_page">Class</Link>
     </div>
   );
 }
 
-export default Dash_board;
+export default DASH_BOARD;

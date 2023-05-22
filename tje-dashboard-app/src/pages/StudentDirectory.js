@@ -1,12 +1,10 @@
-import Student_Directory from "../components/Student_Directory/Student_Directory.js";
-import { Link } from "react-router-dom";
+import STUDENT_DIRECTORY from "../components/STUDENT_DIRECTORY/STUDENT_DIRECTORY.js";
 
 function StudentDirectory() {
   return (
-    <div style={{ textAlign: "center" }}>
-      <Student_Directory />
-      <Link to="/">Home</Link>
-    </div>
+    <>
+      <STUDENT_DIRECTORY />
+    </>
   );
 }
 

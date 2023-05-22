@@ -1,12 +1,10 @@
-import Teacher_Dashboard from "../components/Teacher_Dashboard/Teacher_Dashboard.js";
-import { Link } from "react-router-dom";
+import TEACHER_DASHBOARD from "../components/TEACHER_DASHBOARD/TEACHER_DASHBOARD.js";
 
 function TeacherDashboard() {
   return (
-    <div style={{ textAlign: "center" }}>
-      <Teacher_Dashboard />
-      <Link to="/">Home</Link>
-    </div>
+    <>
+      <TEACHER_DASHBOARD />
+    </>
   );
 }
 
