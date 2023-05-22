@@ -1,10 +1,10 @@
-import OverallDashboard from "../components/OverallDashboard/OverallDashboard.js";
+import Dash_board from "../components/Dash_board/Dash_board.js";
 import { Link } from "react-router-dom";
 
 function Dashboard() {
   return (
     <div style={{ textAlign: "center" }}>
-      <OverallDashboard />
+      <Dash_board />
       <Link to="/">Home</Link>
     </div>
   );

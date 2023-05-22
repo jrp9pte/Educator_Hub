@@ -1,4 +1,4 @@
-function OverallDashboard() {
+function Dash_board() {
   return (
     <div style={{ textAlign: "center" }}>
       <h1>Overall Dashboard</h1>
@@ -6,4 +6,4 @@ function OverallDashboard() {
   );
 }
 
-export default OverallDashboard;
+export default Dash_board;
