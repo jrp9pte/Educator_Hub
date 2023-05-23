@@ -1,15 +1,33 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { db } from "../../firebase.js";
+import { getDocs, collection } from "firebase/firestore";
 
 function TEACHER_DASHBOARD() {
-  //TODO : Map all courses, creating a new element of the list for each course, passing its unique id/tag to the url class_page/:id
-  /*
-  Something like:
-  map (
-  const tag = "/class_page/" + id
-  )
-  <Link to={tag}>{"Class " + tag}</Link>
-  */
+  const [classList, setClassList] = useState([]);
+
+  const classCollectionRef = collection(db, "Classes");
   const navigate = useNavigate();
+  const { teacherID } = useParams();
+  console.log(teacherID);
+
+  useEffect(() => {
+    const getClassList = async () => {
+      try {
+        const data = await getDocs(classCollectionRef);
+        const filteredData = data.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        setClassList(filteredData);
+        // console.log(filteredData);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    getClassList();
+  }, []);
 
   return (
     <div style={{ textAlign: "center" }}>
@@ -17,13 +35,29 @@ function TEACHER_DASHBOARD() {
       <Link to="/">Home</Link>
       <span style={{ margin: "0 10px" }}>|</span>
       <Link onClick={() => navigate(-1)}>Teacher Directory</Link>
+      <br></br>
+      <br></br>
       <div>
-        <li>
-          <Link to="class_page/1">Class 1</Link>
-        </li>
-        <li>
-          <Link to="class_page/2">Class 2</Link>
-        </li>
+        {classList.map((targetClass) => {
+          if (teacherID === targetClass.teacher.id) {
+            return (
+              <div key={targetClass.id}>
+                <Link
+                  to={
+                    "/teacher_dashboard/" +
+                    teacherID +
+                    "/class_page/" +
+                    targetClass.name
+                  }
+                >
+                  {targetClass.name}
+                </Link>
+              </div>
+            );
+          } else {
+            return null;
+          }
+        })}
       </div>
     </div>
   );

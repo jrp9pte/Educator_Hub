@@ -24,7 +24,7 @@ function TEACHER_DIRECTORY() {
     };
 
     getTeacherList();
-  }, [teacherCollectionRef]);
+  }, []);
 
   return (
     <div style={{ textAlign: "center" }}>
@@ -35,9 +35,7 @@ function TEACHER_DIRECTORY() {
       <div>
         {teacherList.map((teacher) => (
           <div key={teacher.id}>
-            <Link to={"/teacher_dashboard/" + teacher.name}>
-              {teacher.name}
-            </Link>
+            <Link to={"/teacher_dashboard/" + teacher.id}>{teacher.name}</Link>
           </div>
         ))}
       </div>
