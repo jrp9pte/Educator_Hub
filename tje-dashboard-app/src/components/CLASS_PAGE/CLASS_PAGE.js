@@ -10,7 +10,7 @@ function CLASS_PAGE() {
       <h1>Class Page</h1>
       <Link to="/overall_dashboard">Dashboard</Link>
       <span style={{ margin: "0 10px" }}>|</span>
-      <Link to="/teacher_dashboard">Teacher Dashboard</Link>
+      <Link to="/teacher_dashboard/">Teacher Dashboard</Link>
       <h2>Class {id}</h2>
     </div>
   );
