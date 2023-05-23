@@ -1,4 +1,4 @@
-import TEACHER_DIRECTORY from "../components/TEACHER_DIRECTORY/TEACHER_DIRECTORY.js";
+import TEACHER_DIRECTORY from "../components/Teacher_Directory/Teacher_Directory";
 
 function TeacherDirectory() {
   return (
