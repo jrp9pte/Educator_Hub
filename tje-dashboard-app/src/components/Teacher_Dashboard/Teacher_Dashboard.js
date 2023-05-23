@@ -9,16 +9,17 @@ function TEACHER_DASHBOARD() {
   )
   <Link to={tag}>{"Class " + tag}</Link>
   */
+
   return (
     <div style={{ textAlign: "center" }}>
       <h1>Teacher Dashboard</h1>
       <Link to="/">Home</Link>
       <div>
         <li>
-          <Link to="/teacher_dashboard/class_page/1">Class 1</Link>
+          <Link to="class_page/1">Class 1</Link>
         </li>
         <li>
-          <Link to="/teacher_dashboard/class_page/2">Class 2</Link>
+          <Link to="class_page/2">Class 2</Link>
         </li>
       </div>
     </div>
