@@ -1,4 +1,4 @@
-import DASH_BOARD from "../components/DASH_BOARD/DASH_BOARD.js";
+import DASH_BOARD from "../components/Dash_board/Dash_board";
 
 function Dashboard() {
   return (

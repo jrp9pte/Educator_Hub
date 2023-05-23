@@ -1,4 +1,4 @@
-import STUDENT_DIRECTORY from "../components/STUDENT_DIRECTORY/STUDENT_DIRECTORY.js";
+import STUDENT_DIRECTORY from "../components/Student_Directory/Student_Directory";
 
 function StudentDirectory() {
   return (
