@@ -20,8 +20,10 @@ function App() {
         <Route path="teacher_directory" element={<TeacherDirectory />} />
         <Route path="teacher_dashboard">
           <Route index element={<TeacherDashboard />} />
-          <Route path=":id" element={<TeacherDashboard />} />
-          <Route path=":id/class_page/:id" element={<ClassPage />} />
+          <Route path=":id">
+            <Route index element={<TeacherDashboard />} />
+            <Route path="class_page/:id" element={<ClassPage />} />
+          </Route>
         </Route>
         <Route
           path="*"
