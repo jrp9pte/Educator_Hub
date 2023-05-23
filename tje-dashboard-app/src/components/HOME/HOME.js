@@ -9,8 +9,6 @@ function HOME() {
       <Link to="/student_directory">Student Directory</Link>
       <span style={{ margin: "0 10px" }}>|</span>
       <Link to="/teacher_directory">Teacher Directory</Link>
-      <span style={{ margin: "0 10px" }}>|</span>
-      <Link to="/teacher_dashboard">Teacher Dashboard</Link>
     </div>
   );
 }
