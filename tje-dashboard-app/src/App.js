@@ -12,11 +12,16 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="overall_dashboard" element={<Dashboard />} />
+        <Route path="overall_dashboard">
+          <Route index element={<Dashboard />} />
+          <Route path="class_page/:id" element={<ClassPage />} />
+        </Route>
         <Route path="student_directory" element={<StudentDirectory />} />
         <Route path="teacher_directory" element={<TeacherDirectory />} />
-        <Route path="teacher_dashboard" element={<TeacherDashboard />} />
-        <Route path="class_page/:id" element={<ClassPage />} />
+        <Route path="teacher_dashboard">
+          <Route index element={<TeacherDashboard />} />
+          <Route path="class_page/:id" element={<ClassPage />} />
+        </Route>
         <Route
           path="*"
           element={

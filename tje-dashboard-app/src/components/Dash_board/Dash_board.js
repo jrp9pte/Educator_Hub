@@ -13,13 +13,12 @@ function DASH_BOARD() {
     <div style={{ textAlign: "center" }}>
       <h1>Dashboard</h1>
       <Link to="/">Home</Link>
-      <p></p>
       <div>
         <li>
-          <Link to="/class_page/1">Class 1</Link>
+          <Link to="/overall_dashboard/class_page/1">Class 1</Link>
         </li>
         <li>
-          <Link to="/class_page/2">Class 2</Link>
+          <Link to="/overall_dashboard/class_page/2">Class 2</Link>
         </li>
       </div>
     </div>
