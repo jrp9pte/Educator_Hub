@@ -2,6 +2,8 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase.js";
 import { getDocs, collection } from "firebase/firestore";
+import Button from "@mui/material/Button";
+import { ButtonGroup } from "@mui/material";
 
 function TEACHER_DASHBOARD() {
   const [classList, setClassList] = useState([]);
@@ -29,35 +31,48 @@ function TEACHER_DASHBOARD() {
     getClassList();
   }, []);
 
+  const teacherClasses = classList.filter(
+    (targetClass) =>
+      targetClass.teacher &&
+      targetClass.teacher.id &&
+      teacherID === targetClass.teacher.id
+  );
+
   return (
     <div style={{ textAlign: "center" }}>
       <h1>Teacher Dashboard</h1>
-      <Link to="/">Home</Link>
-      <span style={{ margin: "0 10px" }}>|</span>
-      <Link onClick={() => navigate(-1)}>Teacher Directory</Link>
-      <br></br>
-      <br></br>
+
+      <ButtonGroup variant="contained" aria-label="outlined button group">
+        <Link to="/" style={{ marginRight: "10px" }}>
+          <Button>Home</Button>
+        </Link>
+        <Link onClick={() => navigate(-1)}>
+          <Button>Teacher Directory</Button>
+        </Link>
+      </ButtonGroup>
+      <br />
+      <br />
       <div>
-        {classList.map((targetClass) => {
-          if (teacherID === targetClass.teacher.id) {
-            return (
-              <div key={targetClass.id}>
-                <Link
-                  to={
-                    "/teacher_dashboard/" +
-                    teacherID +
-                    "/class_page/" +
-                    targetClass.name
-                  }
-                >
-                  {targetClass.name}
-                </Link>
-              </div>
-            );
-          } else {
-            return null;
-          }
-        })}
+        {teacherClasses.length === 0 ? (
+          <p>No Classes Being Taught</p>
+        ) : (
+          teacherClasses.map((targetClass) => (
+            <div key={targetClass.id}>
+              <Link
+                to={
+                  "/teacher_dashboard/" +
+                  teacherID +
+                  "/class_page/" +
+                  targetClass.name
+                }
+              >
+                <Button variant="outlined">{targetClass.name}</Button>
+              </Link>
+              <br />
+              <br />
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
