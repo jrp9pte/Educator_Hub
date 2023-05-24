@@ -19,7 +19,6 @@ function GetClass (classes, id) {
   
 }
 function Student_Directory() {
-
   const studentColRef = collection(db, "Students");
   const classRef = collection(db, "Classes");
   const [studentList, setStudentList] = useState([]);
