@@ -35,7 +35,7 @@ function DASH_BOARD() {
       <div>
         {classList.map((classes) => (
           <div key={classes.id}>
-            <Link to={"/teacher_dashboard/" + classes.id}>{classes.name + " - " + classes.teacher.name}</Link>
+            <Link to={"/overall_dashboard/" + classes.id}>{classes.name + " - " + classes.teacher.name}</Link>
           </div>
         ))}
       </div>
