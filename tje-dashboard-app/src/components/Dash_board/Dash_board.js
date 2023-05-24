@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase.js";
 import { getDocs, collection } from "firebase/firestore";
@@ -7,6 +7,7 @@ function DASH_BOARD() {
   const [classList, setClassList] = useState([]);
 
   const classCollectionRef = collection(db, "Classes");
+
 
   useEffect(() => {
     const getClassList = async () => {
@@ -17,7 +18,7 @@ function DASH_BOARD() {
           id: doc.id,
         }));
         setClassList(filteredData);
-        console.log(filteredData);
+        // console.log(filteredData);
       } catch (err) {
         console.log(err);
       }
@@ -33,14 +34,28 @@ function DASH_BOARD() {
       <br></br>
       <br></br>
       <div>
-        {classList.map((classes) => (
-          <div key={classes.id}>
-            <Link to={"/overall_dashboard/" + classes.id}>{classes.name + " - " + classes.teacher.name}</Link>
-          </div>
-        ))}
+        {classList.map((target) => {
+            return (
+              <div key={target.id}>
+                <Link
+                  to={
+                    "/teacher_dashboard/" +
+                    target.id +
+                    "/class_page/" +
+                    target.name
+                  }
+                >
+                  {target.name}
+                </Link>
+              </div>
+            );
+          
+        })}
       </div>
     </div>
   );
 }
 
 export default DASH_BOARD;
+
+
