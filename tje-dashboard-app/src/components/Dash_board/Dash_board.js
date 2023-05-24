@@ -1,29 +1,43 @@
 import { Link } from "react-router-dom";
-import { useState } from 'react';
-import {doc, getDoc} from "firebase/firestore";
-import db from "./firebase"
+import { useEffect, useState } from "react";
+import { db } from "../../firebase.js";
+import { getDocs, collection } from "firebase/firestore";
 
 function DASH_BOARD() {
-  //TODO : Map all courses, creating a new element of the list for each course, passing its unique id/tag to the url class_page/:id
-  /*
-  Something like:
-  map (
-  const tag = "/class_page/" + id
-  )
-  <Link to={tag}>{"Class " + tag}</Link>
-  */
- 
+  const [classList, setClassList] = useState([]);
+
+  const classCollectionRef = collection(db, "Classes");
+
+  useEffect(() => {
+    const getClassList = async () => {
+      try {
+        const data = await getDocs(classCollectionRef);
+        const filteredData = data.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        setClassList(filteredData);
+        console.log(filteredData);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    getClassList();
+  }, []);
+
   return (
     <div style={{ textAlign: "center" }}>
-      <h1>Dashboard</h1>
+      <h1>Overall Dashboard</h1>
       <Link to="/">Home</Link>
+      <br></br>
+      <br></br>
       <div>
-        <li>
-          <Link to="/overall_dashboard/class_page/1">Class 1</Link>
-        </li>
-        <li>
-          <Link to="/overall_dashboard/class_page/2">Class 2</Link>
-        </li>
+        {classList.map((classes) => (
+          <div key={classes.id}>
+            <Link to={"/teacher_dashboard/" + classes.id}>{classes.name + " - " + classes.teacher.name}</Link>
+          </div>
+        ))}
       </div>
     </div>
   );
