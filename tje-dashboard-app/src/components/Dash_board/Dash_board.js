@@ -1,12 +1,14 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase.js";
-import { getDocs, collection, addDoc, doc, deleteDoc } from "firebase/firestore";
+import { getDocs, collection, addDoc, doc, deleteDoc, where, query } from "firebase/firestore";
+import Button from "@mui/material/Button";
+import { ButtonGroup, TextField } from "@mui/material";
 
 function DASH_BOARD() {
   const [classList, setClassList] = useState([]);
   const [newClassName, setNewClassName] = useState("");
-
+  const [newTeacherName, setNewTeacherName] = useState("");
   const classCollectionRef = collection(db, "Classes");
 
 
@@ -30,8 +32,21 @@ function DASH_BOARD() {
 
   const handleAddClass = async () => {
     try {
-      await addDoc(classCollectionRef, {name: newClassName});
+      const teacherCollectionRef = collection(db, "Teachers");
+      const teacherQuery = query(teacherCollectionRef, where("name", "==", newTeacherName));
+      const teacherSnapshot = await getDocs(teacherQuery);
+
+      let teacherRef;
+
+      if (teacherSnapshot.empty) {
+        teacherRef = await addDoc(teacherCollectionRef, {name: newTeacherName});
+      } else {
+        teacherRef = doc(db, "Teachers", teacherSnapshot.docs[0].id);
+      }
+
+      await addDoc(classCollectionRef, {name: newClassName, teacher: teacherRef});
       setNewClassName("");
+      setNewTeacherName("");
       getClassList();
     }catch (err){
       console.log(err);
@@ -51,20 +66,35 @@ function DASH_BOARD() {
   return (
     <div style={{ textAlign: "center" }}>
       <h1>Overall Dashboard</h1>
-      <Link to="/">Home</Link>
+      <ButtonGroup variant="contained" aria-label="outlined button group">
+        <Link to="/" style={{ textDecoration: 'none' }}>
+          <Button>Home</Button>
+        </Link>
+      </ButtonGroup>
       <br></br>
       <br></br>
+      
+      <TextField
+        type="text"
+        value={newClassName}
+        onChange={(e) => setNewClassName(e.target.value)}
+        placeholder="Enter new class name"
+      />
+      <TextField
+        value={newTeacherName}
+        onChange={(e) => setNewTeacherName(e.target.value)}
+        placeholder="Enter teacher's name"
+      />
+
+      <Button onClick={handleAddClass} variant="outlined" style = {{marginLeft:'10px'}}>Add Class</Button>
+
+      <br></br>
+      <br></br>
+
       <div>
-        <input
-          type="text"
-          value={newClassName}
-          onChange={(e) => setNewClassName(e.target.value)}
-          placeholder="Enter new class name"
-        />
-        <button onClick={handleAddClass}> Add Class</button>
         {classList.map((target) => {
             return (
-              <div key={target.id}>
+              <div key={target.id} style={{ marginBottom:'10px'}}>
                 <Link
                   to={
                     "/teacher_dashboard/" +
@@ -72,13 +102,13 @@ function DASH_BOARD() {
                     "/class_page/" +
                     target.name
                   }
+                  style = {{textDecoration: 'none'}}
                 >
-                  {target.name}
+                  <Button variant = "outline">{target.name}</Button>
                 </Link>
-                <button onClick={() => handleDeleteClass(target.id)}>Delete</button>
+                <Button onClick={() => handleDeleteClass(target.id)} variant="outlined">Delete</Button>
               </div>
             );
-          
         })}
       </div>
     </div>
