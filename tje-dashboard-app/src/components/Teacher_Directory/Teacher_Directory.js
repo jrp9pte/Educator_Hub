@@ -29,6 +29,7 @@ function TEACHER_DIRECTORY() {
     };
 
     getTeacherList();
+
   }, [teacherAdded]);
 
   async function addNewTeacher(newName) {
