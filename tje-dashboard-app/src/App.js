@@ -2,6 +2,7 @@
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home.js";
 import Dashboard from "./pages/Dashboard.js";
+import Calendar from "./pages/Calendar.js";
 import StudentDirectory from "./pages/StudentDirectory.js";
 import TeacherDirectory from "./pages/TeacherDirectory.js";
 import TeacherDashboard from "./pages/TeacherDashboard.js";
