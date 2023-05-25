@@ -8,6 +8,10 @@ import { useEffect, useState } from "react";
 function CLASS_PAGE() {
   const teacherCollectionRef = collection(db, "Teachers");
   const [teacherList, setTeacherList] = useState([]);
+
+  const studentCollectionRef = collection(db, "Students");
+  const [studentList, setStudentList] = useState([]);
+
   const [classData, setClassData] = useState();
 
   const { className } = useParams();
@@ -35,6 +39,24 @@ function CLASS_PAGE() {
     };
 
     getTeacherList();
+  }, []);
+
+  useEffect(() => {
+    const getStudentList = async () => {
+      try {
+        const data = await getDocs(studentCollectionRef);
+        const filteredData = data.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        setStudentList(filteredData);
+        console.log(filteredData);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    getStudentList();
   }, []);
 
   useEffect(() => {
@@ -71,8 +93,6 @@ function CLASS_PAGE() {
         </>
       )}
       <h2> {newClassId} Class</h2>
-      {console.log("classData:", classData)}
-      {console.log("teacherList:", teacherList)}
       {classData && teacherList ? (
         <div>
           Taught By:{" "}
@@ -86,7 +106,8 @@ function CLASS_PAGE() {
       )}
       {classData && teacherList ? (
         <div>
-          <h3>Students:</h3>
+          <h3>Students</h3>
+          {}
         </div>
       ) : (
         <div>Loading...</div>
