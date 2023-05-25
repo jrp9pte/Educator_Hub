@@ -49,7 +49,7 @@ function TEACHER_DASHBOARD() {
     };
 
     getTeacherData();
-  }, [teacherID]);
+  }, []);
 
   const teacherClasses = classList.filter(
     (targetClass) =>

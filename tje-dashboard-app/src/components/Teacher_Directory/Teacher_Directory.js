@@ -39,6 +39,7 @@ function TEACHER_DIRECTORY() {
           id: doc.id,
         }));
         setTeacherList(filteredData);
+        console.log(filteredData);
       } catch (err) {
         console.log(err);
       }

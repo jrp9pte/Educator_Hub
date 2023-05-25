@@ -97,7 +97,7 @@ function CLASS_PAGE() {
     };
 
     getClassData();
-  }, [classID]);
+  }, []);
 
   async function editStudent() {
     try {
