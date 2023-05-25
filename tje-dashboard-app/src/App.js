@@ -14,7 +14,10 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="overall_dashboard">
           <Route index element={<Dashboard />} />
-          <Route path="class_page/:id" element={<ClassPage />} />
+          <Route
+            path=":classID/class_page/:className"
+            element={<ClassPage />}
+          />
         </Route>
         <Route path="student_directory" element={<StudentDirectory />} />
         <Route path="teacher_directory" element={<TeacherDirectory />} />

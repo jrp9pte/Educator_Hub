@@ -1,7 +1,15 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase.js";
-import { getDocs, collection, addDoc, doc, deleteDoc, where, query } from "firebase/firestore";
+import {
+  getDocs,
+  collection,
+  addDoc,
+  doc,
+  deleteDoc,
+  where,
+  query,
+} from "firebase/firestore";
 import Button from "@mui/material/Button";
 import { ButtonGroup, TextField } from "@mui/material";
 
@@ -10,9 +18,6 @@ function DASH_BOARD() {
   const [newClassName, setNewClassName] = useState("");
   const [newTeacherName, setNewTeacherName] = useState("");
   const classCollectionRef = collection(db, "Classes");
-
-  
-
 
   useEffect(() => {
     getClassList();
@@ -35,90 +40,104 @@ function DASH_BOARD() {
   const handleAddClass = async () => {
     try {
       const teacherCollectionRef = collection(db, "Teachers");
-      const teacherQuery = query(teacherCollectionRef, where("name", "==", newTeacherName));
+      const teacherQuery = query(
+        teacherCollectionRef,
+        where("name", "==", newTeacherName)
+      );
       const teacherSnapshot = await getDocs(teacherQuery);
 
       let teacherRef;
       if (newTeacherName == "" || newClassName == "") {
-        
         console.log("input teacher/class name");
-
-      
-      }
-      else {
-      if (teacherSnapshot.empty) {
-        teacherRef = await addDoc(teacherCollectionRef, {name: newTeacherName});
       } else {
-        teacherRef = doc(db, "Teachers", teacherSnapshot.docs[0].id);
-      }
+        if (teacherSnapshot.empty) {
+          teacherRef = await addDoc(teacherCollectionRef, {
+            name: newTeacherName,
+          });
+        } else {
+          teacherRef = doc(db, "Teachers", teacherSnapshot.docs[0].id);
+        }
 
-      await addDoc(classCollectionRef, {name: newClassName, teacher: teacherRef});
-    
-      setNewClassName("");
-      setNewTeacherName("");
-      getClassList();
-    }
-    }catch (err){
+        await addDoc(classCollectionRef, {
+          name: newClassName,
+          teacher: teacherRef,
+        });
+
+        setNewClassName("");
+        setNewTeacherName("");
+        getClassList();
+      }
+    } catch (err) {
       console.log(err);
     }
   };
 
   const handleDeleteClass = async (classId) => {
     try {
-      await deleteDoc(doc(db,"Classes", classId));
+      await deleteDoc(doc(db, "Classes", classId));
       getClassList();
     } catch (err) {
       console.log(err);
     }
-  }
-
+  };
 
   return (
     <div style={{ textAlign: "center" }}>
       <h1>Overall Dashboard</h1>
       <ButtonGroup variant="contained" aria-label="outlined button group">
-        <Link to="/" style={{ textDecoration: 'none' }}>
+        <Link to="/" style={{ textDecoration: "none" }}>
           <Button>Home</Button>
         </Link>
       </ButtonGroup>
       <br></br>
       <br></br>
-      
       <TextField
         type="text"
         value={newClassName}
         onChange={(e) => setNewClassName(e.target.value)}
         placeholder="Enter new class name"
-      /> {" "}
+      />{" "}
       <TextField
         value={newTeacherName}
         onChange={(e) => setNewTeacherName(e.target.value)}
         placeholder="Enter teacher's name"
       />
-
-      <Button onClick={handleAddClass} variant="outlined" style = {{marginLeft:'10px', marginTop: '8px'}}>Add Class</Button>
-
+      <Button
+        onClick={handleAddClass}
+        variant="outlined"
+        style={{ marginLeft: "10px", marginTop: "8px" }}
+      >
+        Add Class
+      </Button>
       <br></br>
       <br></br>
-
       <div>
         {classList.map((target) => {
-            return (
-              <div key={target.id} style={{ marginRight:'100px',marginBottom:'10px'}}>
-                <Link
-                  to={
-                    "/teacher_dashboard/" +
-                    target.id +
-                    "/class_page/" +
-                    target.name
-                  }
-                  style = {{textDecoration: 'none'}}
+          return (
+            <div
+              key={target.id}
+              style={{ marginRight: "100px", marginBottom: "10px" }}
+            >
+              <Link
+                to={target.id + "/class_page/" + target.name}
+                style={{ textDecoration: "none" }}
+              >
+                <Button
+                  variant="outline"
+                  style={{ display: "flex", margin: "auto", marginTop: "8px" }}
                 >
-                  <Button variant = "outline" style = {{display: 'flex',margin: 'auto',marginTop: '8px'}}>{target.name}</Button>
-                </Link>
-                <Button onClick={() => handleDeleteClass(target.id)} variant="outlined" style = {{marginLeft: '200px',marginTop: '-57px'}}>Delete</Button>
-              </div>
-            );
+                  {target.name}
+                </Button>
+              </Link>
+              <Button
+                onClick={() => handleDeleteClass(target.id)}
+                variant="outlined"
+                style={{ marginLeft: "200px", marginTop: "-57px" }}
+              >
+                Delete
+              </Button>
+            </div>
+          );
         })}
       </div>
     </div>
@@ -126,5 +145,3 @@ function DASH_BOARD() {
 }
 
 export default DASH_BOARD;
-
-
