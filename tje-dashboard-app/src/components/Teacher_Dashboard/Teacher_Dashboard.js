@@ -70,7 +70,7 @@ function TEACHER_DASHBOARD() {
           <Button>Teacher Directory</Button>
         </Link>
       </ButtonGroup>
-      <h2>{teacherData ? teacherData.name : null}</h2>
+      <h2>{teacherData ? teacherData.name + "'s Classes" : null}</h2>
       <div>
         {teacherClasses.length === 0 ? (
           <p>No Classes Being Taught</p>
