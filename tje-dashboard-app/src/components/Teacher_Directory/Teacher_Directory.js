@@ -29,7 +29,6 @@ function TEACHER_DIRECTORY() {
   const [teacherRemoved, setTeacherRemoved] = useState("");
   const [hasClass, setHasClass] = useState(false);
 
-
   useEffect(() => {
     const getTeacherList = async () => {
       const teacherCollectionRef = collection(db, "Teachers");
@@ -49,7 +48,6 @@ function TEACHER_DIRECTORY() {
   }, [change]);
 
   async function addNewTeacher(newName) {
-
     setHasClass(false);
     await addDoc(collection(db, "Teachers"), {
       name: newName,
@@ -72,12 +70,7 @@ function TEACHER_DIRECTORY() {
     }
   }
 
-  const [classList, setClassList] = useState([]);
-  const [teacherRemoved, setTeacherRemoved] = useState("");
-  const classCollectionRef = collection(db, "Classes");
   useEffect(() => {
-
-
     const getClassList = async () => {
       const classCollectionRef = collection(db, "Classes");
       try {
@@ -93,7 +86,6 @@ function TEACHER_DIRECTORY() {
     };
     getClassList();
   }, []);
-
 
   async function deleteTeacher(teacherRemoved) {
     try {
