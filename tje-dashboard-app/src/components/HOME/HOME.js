@@ -29,7 +29,6 @@ function HOME() {
       </Link>
       <br></br>
       <br></br>
-      <LoginForm />
     </div>
 
   );
