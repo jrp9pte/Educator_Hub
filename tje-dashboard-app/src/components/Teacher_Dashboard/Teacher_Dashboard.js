@@ -1,17 +1,21 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase.js";
-import { getDocs, collection } from "firebase/firestore";
+import { getDocs, collection, getDoc, doc } from "firebase/firestore";
 import Button from "@mui/material/Button";
 import { ButtonGroup } from "@mui/material";
-
 
 function TEACHER_DASHBOARD() {
   const [classList, setClassList] = useState([]);
 
   const classCollectionRef = collection(db, "Classes");
+
   const navigate = useNavigate();
   const { teacherID } = useParams();
+
+  const docRef = doc(db, "Teachers", teacherID);
+  const [teacherData, setTeacherData] = useState();
+
   console.log(teacherID);
 
   useEffect(() => {
@@ -30,6 +34,27 @@ function TEACHER_DASHBOARD() {
     };
 
     getClassList();
+  }, []);
+
+  useEffect(() => {
+    const getTeacherData = async () => {
+      try {
+        const docSnapshot = await getDoc(docRef);
+        if (docSnapshot.exists()) {
+          const data = {
+            ...docSnapshot.data(),
+            id: docSnapshot.id,
+          };
+          setTeacherData(data);
+        } else {
+          console.log("Teacher does not exist");
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    getTeacherData();
   }, []);
 
   const teacherClasses = classList.filter(
@@ -51,8 +76,7 @@ function TEACHER_DASHBOARD() {
           <Button>Teacher Directory</Button>
         </Link>
       </ButtonGroup>
-      <br />
-      <br />
+      <h2>{teacherData ? teacherData.name : null}</h2>
       <div>
         {teacherClasses.length === 0 ? (
           <p>No Classes Being Taught</p>
@@ -63,6 +87,8 @@ function TEACHER_DASHBOARD() {
                 to={
                   "/teacher_dashboard/" +
                   teacherID +
+                  "/" +
+                  targetClass.id +
                   "/class_page/" +
                   targetClass.name
                 }

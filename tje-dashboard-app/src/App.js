@@ -39,7 +39,7 @@ function App() {
               element={<TeacherDashboard />}
             />
             <Route
-              path="teacher_dashboard/:teacherID/class_page/:classId"
+              path="teacher_dashboard/:teacherID/:classID/class_page/:className"
               element={<ClassPage />}
             />
             <Route

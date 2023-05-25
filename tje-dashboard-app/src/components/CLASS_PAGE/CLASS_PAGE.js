@@ -21,7 +21,7 @@ function CLASS_PAGE() {
   const navigate = useNavigate();
   const teacherDashboardMatch = useMatch("/teacher_dashboard");
   const teacherDashboardAndClassMatch = useMatch(
-    "/teacher_dashboard/:id/class_page/:id"
+    "/teacher_dashboard/:id/:id/class_page/:id"
   );
 
   useEffect(() => {
