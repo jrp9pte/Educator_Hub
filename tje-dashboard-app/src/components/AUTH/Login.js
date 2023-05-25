@@ -12,6 +12,8 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -41,6 +43,7 @@ const Login = () => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
+        toast.error("Error: Incorrect Password!");
       });
   };
   const styles = `
@@ -148,6 +151,9 @@ const Login = () => {
                   Login
                 </Button>
               </div>
+            </form>
+            <form>
+              <ToastContainer /> 
             </form>
           </div>
         </section>
