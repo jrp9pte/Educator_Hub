@@ -18,6 +18,8 @@ import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 
 function CLASS_PAGE() {
+  const [change, setChange] = useState(false);
+
   const teacherCollectionRef = collection(db, "Teachers");
   const [teacherList, setTeacherList] = useState([]);
 
@@ -36,9 +38,12 @@ function CLASS_PAGE() {
     "/teacher_dashboard/:id/:id/class_page/:id"
   );
   const [prevName, setPrevName] = useState("");
-  const [studentName, setStudentName] = useState("");
-  const [newGrade, setNewGrade] = useState();
-  const [grade, setGrade] = useState();
+  const [newGrade, setNewGrade] = useState("");
+
+  const [addStudentName, setAddStudentName] = useState("");
+  const [addGrade, setAddGrade] = useState("");
+
+  const [removeStudentName, setRemoveStudentName] = useState("");
 
   useEffect(() => {
     const getTeacherList = async () => {
@@ -73,7 +78,7 @@ function CLASS_PAGE() {
     };
 
     getStudentList();
-  }, []);
+  }, [change]);
 
   useEffect(() => {
     const getClassData = async () => {
@@ -123,6 +128,7 @@ function CLASS_PAGE() {
         await updateDoc(docRef, {
           classesTaken: updatedClassesTaken,
         });
+        setChange(!change);
         console.log("Document updated successfully.");
       } else {
         console.log("Student not found.");
@@ -135,9 +141,9 @@ function CLASS_PAGE() {
   async function addStudentToClass() {
     try {
       let changedStudent = studentList.filter(
-        (student) => student.name === studentName
+        (student) => student.name === addStudentName
       );
-      setStudentName("");
+      setAddStudentName("");
 
       const docRef = doc(db, "Students", changedStudent[0].id);
       const docSnap = await getDoc(docRef);
@@ -148,14 +154,41 @@ function CLASS_PAGE() {
         const classRef = doc(db, "Classes", classData.id);
         const newClass = {
           class: classRef,
-          grade: grade,
+          grade: addGrade,
         };
         const updatedClassesTaken = [...classesTaken, newClass];
-        setGrade("");
+        setAddGrade("");
 
         await updateDoc(docRef, {
           classesTaken: updatedClassesTaken,
         });
+        setChange(!change);
+        console.log("Document updated successfully.");
+      } else {
+        console.log("Student not found.");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async function removeStudentFromClass() {
+    try {
+      let changedStudent = studentList.find(
+        (student) => student.name === removeStudentName
+      );
+      if (changedStudent) {
+        const updatedClassesTaken = changedStudent.classesTaken.filter(
+          (classTaken) => classTaken.class.id !== classData.id
+        );
+
+        const docRef = doc(db, "Students", changedStudent.id);
+
+        await updateDoc(docRef, {
+          classesTaken: updatedClassesTaken,
+        });
+        setChange(!change);
+        setRemoveStudentName("");
         console.log("Document updated successfully.");
       } else {
         console.log("Student not found.");
@@ -278,9 +311,9 @@ function CLASS_PAGE() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={studentName}
+                value={addStudentName}
                 label="Previous Name"
-                onChange={(e) => setStudentName(e.target.value)}
+                onChange={(e) => setAddStudentName(e.target.value)}
               >
                 {studentList.map((student) => {
                   const matchingClass = student.classesTaken.find(
@@ -300,8 +333,8 @@ function CLASS_PAGE() {
             </FormControl>
           </Box>
           <TextField
-            value={grade}
-            onChange={(e) => setGrade(e.target.value)}
+            value={addGrade}
+            onChange={(e) => setAddGrade(e.target.value)}
             label="Grade"
             variant="outlined"
             sx={{ width: 225 }}
@@ -315,6 +348,51 @@ function CLASS_PAGE() {
             onClick={() => addStudentToClass()}
           >
             Add Student
+          </Button>
+        </div>
+
+        <h2>Remove A Student</h2>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Box
+            sx={{
+              width: 225,
+            }}
+          >
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Student</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={removeStudentName}
+                label="Previous Name"
+                onChange={(e) => setRemoveStudentName(e.target.value)}
+              >
+                {studentList.map((student) => {
+                  const matchingClass = student.classesTaken.find(
+                    (classTaken) => classTaken.class.id === classData.id
+                  );
+                  if (matchingClass) {
+                    return (
+                      <MenuItem key={student.id} value={student.name}>
+                        {" "}
+                        {student.name}{" "}
+                      </MenuItem>
+                    );
+                  }
+                  return null;
+                })}
+              </Select>
+            </FormControl>
+          </Box>
+        </div>
+        <br></br>
+        <div>
+          <Button
+            style={{ marginBottom: "20px" }}
+            variant="contained"
+            onClick={() => removeStudentFromClass()}
+          >
+            Remove Student
           </Button>
         </div>
       </footer>
