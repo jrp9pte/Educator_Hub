@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { db } from './../../firebase.js';
@@ -13,25 +14,27 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
+
 async function addNewStudent(studentName, studentAge, sClass, allClass) {
-  
   let classInfo = [];
-  for (let i=0; i<sClass.length; i++){
+  for (let i = 0; i < sClass.length; i++) {
     const classCollectionRef = collection(db, "Classes");
-    const classQuery = query(classCollectionRef, where("name", "==", GetClass(allClass, GetClassId(allClass, sClass[i]))));
+    const classQuery = query(
+      classCollectionRef,
+      where("name", "==", GetClass(allClass, GetClassId(allClass, sClass[i])))
+    );
     const classSnapshot = await getDocs(classQuery);
     let classRef = doc(db, "Classes", classSnapshot.docs[0].id);
-    classInfo.push({class: classRef, grade: -1})
+    classInfo.push({ class: classRef, grade: -1 });
   }
 
-  
-
-  const docRef = await addDoc(collection(db, "Students"), {
+  await addDoc(collection(db, "Students"), {
     name: studentName,
     age: studentAge,
-    classesTaken: classInfo
+    classesTaken: classInfo,
   });
 }
+
 
 async function removeStudent (allStudent, studentToRemove) {
   let delStudent = allStudent.filter(
@@ -60,33 +63,27 @@ async function editStudent (allStudent, editName, editAge, studentChange) {
 }
 
 function GetClass (classes, id) {
+
   let className = "";
 
-  classes.filter(cla => cla.id  === id).map(filteredClass => (
-    className = filteredClass.name
-  ));
-
+  classes
+    .filter((cla) => cla.id === id)
+    .map((filteredClass) => (className = filteredClass.name));
 
   return className;
-
 }
 
 function GetClassId(classes, className) {
   let classId = "";
+
   classes.filter(cla => cla.name  === className).map(filteredId => (
     classId = filteredId.id
   ));
+
   return classId;
-
-
 }
 
-
-
-
 function Student_Directory() {
-  const studentColRef = collection(db, "Students");
-  const classRef = collection(db, "Classes");
   const [studentList, setStudentList] = useState([]);
   const [classList, setClassList] = useState([]);
   const [studentName, setStudentName] = useState("");
@@ -107,12 +104,13 @@ function Student_Directory() {
     } = event;
     setStudentClass(
       // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
+      typeof value === "string" ? value.split(",") : value
     );
   };
 
   useEffect(() => {
     const getClassList = async () => {
+      const classRef = collection(db, "Classes");
       try {
         const classD = await getDocs(classRef);
         const filteredData = classD.docs.map((doc) => ({
@@ -130,6 +128,7 @@ function Student_Directory() {
 
   useEffect(() => {
     const getStudentList = async () => {
+      const studentColRef = collection(db, "Students");
       try {
         const data = await getDocs(studentColRef);
         const filteredData = data.docs.map((doc) => ({
@@ -150,20 +149,20 @@ function Student_Directory() {
       <Link to="/Home">Home</Link>
       <header>
         <br></br>
-      <Button
+        <Button
           variant="outlined"
           onClick={() => {
-            if(studentName !== "") {
-            addNewStudent(studentName, studentAge, studentClass, classList);
-            setStudentAdded(!studentAdded);
+            if (studentName !== "") {
+              addNewStudent(studentName, studentAge, studentClass, classList);
+              setStudentAdded(!studentAdded);
             }
           }}
         >
-          Add New Student 
+          Add New Student
         </Button>
         <br></br>
         <br></br>
-      <TextField
+        <TextField
           value={studentName}
           onChange={(e) => setStudentName(e.target.value)}
           label="Student Name"
@@ -175,32 +174,26 @@ function Student_Directory() {
           label="Student age"
           variant="outlined"
         />
-        <Box
+        <Box>
+          <FormControl size="medium">
+            <InputLabel id="demo-simple-select-label">Classes</InputLabel>
+            <Select
+              labelId="demo-multiple-select-label"
+              id="demo-multiple-select"
+              multiple
+              value={studentClass}
+              label="Classes"
+              onChange={handleChange}
             >
-              <FormControl size = 'medium' >
-                <InputLabel id="demo-simple-select-label">
-                  Classes
-                </InputLabel>
-                <Select
-                  labelId="demo-multiple-select-label"
-                  id="demo-multiple-select"
-                  multiple
-                  value={studentClass}
-                  label="Classes"
-                  onChange={handleChange}
-                >
-
-                  {classList.map((oneClass) => (
-                    <MenuItem key={oneClass.id} value={oneClass.name}>
-                      {" "}
-                      {oneClass.name}{" "}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
-        
-
+              {classList.map((oneClass) => (
+                <MenuItem key={oneClass.id} value={oneClass.name}>
+                  {" "}
+                  {oneClass.name}{" "}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
       </header>
       <br></br>
       <br></br>
@@ -289,33 +282,29 @@ function Student_Directory() {
           variant="outlined"
         />
         <br></br>
-        <Box sx= {{ minWidth : 275}}>
-          
-        {studentList.map((data) => (
-          <div key={data.id}>
-            <Card variant = "outlined">
-          <React.Fragment>
-            <CardContent>
-              <Typography sx={{ fontSize: 16 }} gutterBottom>
-              {data.name}, Age: {data.age}
-              </Typography>
+        <Box sx={{ minWidth: 275 }}>
+          {studentList.map((data) => (
+            <div key={data.id}>
+              <Card variant="outlined">
+                <React.Fragment>
+                  <CardContent>
+                    <Typography sx={{ fontSize: 16 }} gutterBottom>
+                      {data.name}, Age: {data.age}
+                    </Typography>
+                    <br></br>
+                    <Typography sx={{ fontSize: 14 }}>
+                      Classes Taken:
+                      {data.classesTaken.map((c) => (
+                        <div key={c.id}>{GetClass(classList, c.class.id)}</div>
+                      ))}
+                    </Typography>
+                    <br></br>
+                  </CardContent>
+                </React.Fragment>
+              </Card>
               <br></br>
-              <Typography  sx= {{ fontSize: 14}} >
-              Classes Taken: 
-              {data.classesTaken.map( (c) => (
-                <div key = {c.id}>
-                  {GetClass(classList, c.class.id)}
-                </div>
-              ))}
-              </Typography>
-          <br></br>
-          </CardContent>
-        </React.Fragment>
-        </Card>
-        <br></br>
-        </div>
-        ))}
-        
+            </div>
+          ))}
         </Box>
 
         

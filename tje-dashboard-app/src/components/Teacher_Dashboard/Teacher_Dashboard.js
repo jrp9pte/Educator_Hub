@@ -8,18 +8,14 @@ import { ButtonGroup } from "@mui/material";
 function TEACHER_DASHBOARD() {
   const [classList, setClassList] = useState([]);
 
-  const classCollectionRef = collection(db, "Classes");
-
   const navigate = useNavigate();
   const { teacherID } = useParams();
 
-  const docRef = doc(db, "Teachers", teacherID);
   const [teacherData, setTeacherData] = useState();
-
-  console.log(teacherID);
 
   useEffect(() => {
     const getClassList = async () => {
+      const classCollectionRef = collection(db, "Classes");
       try {
         const data = await getDocs(classCollectionRef);
         const filteredData = data.docs.map((doc) => ({
@@ -27,7 +23,6 @@ function TEACHER_DASHBOARD() {
           id: doc.id,
         }));
         setClassList(filteredData);
-        // console.log(filteredData);
       } catch (err) {
         console.log(err);
       }
@@ -38,6 +33,7 @@ function TEACHER_DASHBOARD() {
 
   useEffect(() => {
     const getTeacherData = async () => {
+      const docRef = doc(db, "Teachers", teacherID);
       try {
         const docSnapshot = await getDoc(docRef);
         if (docSnapshot.exists()) {
@@ -46,8 +42,6 @@ function TEACHER_DASHBOARD() {
             id: docSnapshot.id,
           };
           setTeacherData(data);
-        } else {
-          console.log("Teacher does not exist");
         }
       } catch (err) {
         console.log(err);
@@ -55,7 +49,7 @@ function TEACHER_DASHBOARD() {
     };
 
     getTeacherData();
-  }, []);
+  }, [teacherID]);
 
   const teacherClasses = classList.filter(
     (targetClass) =>
@@ -76,7 +70,7 @@ function TEACHER_DASHBOARD() {
           <Button>Teacher Directory</Button>
         </Link>
       </ButtonGroup>
-      <h2>{teacherData ? teacherData.name : null}</h2>
+      <h2>{teacherData ? teacherData.name + "'s Classes" : null}</h2>
       <div>
         {teacherClasses.length === 0 ? (
           <p>No Classes Being Taught</p>

@@ -20,17 +20,15 @@ import TextField from "@mui/material/TextField";
 function CLASS_PAGE() {
   const [change, setChange] = useState(false);
 
-  const teacherCollectionRef = collection(db, "Teachers");
   const [teacherList, setTeacherList] = useState([]);
 
-  const studentCollectionRef = collection(db, "Students");
   const [studentList, setStudentList] = useState([]);
 
   const [classData, setClassData] = useState();
 
   const { className } = useParams();
   const { classID } = useParams();
-  const docRef = doc(db, "Classes", classID);
+
   const newClassId = className.charAt(0).toUpperCase() + className.slice(1);
   const navigate = useNavigate();
   const teacherDashboardMatch = useMatch("/teacher_dashboard");
@@ -47,6 +45,7 @@ function CLASS_PAGE() {
 
   useEffect(() => {
     const getTeacherList = async () => {
+      const teacherCollectionRef = collection(db, "Teachers");
       try {
         const data = await getDocs(teacherCollectionRef);
         const filteredData = data.docs.map((doc) => ({
@@ -64,6 +63,7 @@ function CLASS_PAGE() {
 
   useEffect(() => {
     const getStudentList = async () => {
+      const studentCollectionRef = collection(db, "Students");
       try {
         const data = await getDocs(studentCollectionRef);
         const filteredData = data.docs.map((doc) => ({
@@ -71,7 +71,6 @@ function CLASS_PAGE() {
           id: doc.id,
         }));
         setStudentList(filteredData);
-        console.log(filteredData);
       } catch (err) {
         console.log(err);
       }
@@ -82,6 +81,7 @@ function CLASS_PAGE() {
 
   useEffect(() => {
     const getClassData = async () => {
+      const docRef = doc(db, "Classes", classID);
       try {
         const docSnapshot = await getDoc(docRef);
         if (docSnapshot.exists()) {
@@ -90,8 +90,6 @@ function CLASS_PAGE() {
             id: docSnapshot.id,
           };
           setClassData(data);
-        } else {
-          console.log("Document does not exist");
         }
       } catch (err) {
         console.log(err);
@@ -99,7 +97,7 @@ function CLASS_PAGE() {
     };
 
     getClassData();
-  }, []);
+  }, [classID]);
 
   async function editStudent() {
     try {
@@ -129,9 +127,6 @@ function CLASS_PAGE() {
           classesTaken: updatedClassesTaken,
         });
         setChange(!change);
-        console.log("Document updated successfully.");
-      } else {
-        console.log("Student not found.");
       }
     } catch (err) {
       console.error(err);
@@ -163,9 +158,6 @@ function CLASS_PAGE() {
           classesTaken: updatedClassesTaken,
         });
         setChange(!change);
-        console.log("Document updated successfully.");
-      } else {
-        console.log("Student not found.");
       }
     } catch (err) {
       console.error(err);
@@ -189,9 +181,6 @@ function CLASS_PAGE() {
         });
         setChange(!change);
         setRemoveStudentName("");
-        console.log("Document updated successfully.");
-      } else {
-        console.log("Student not found.");
       }
     } catch (err) {
       console.error(err);
@@ -212,18 +201,20 @@ function CLASS_PAGE() {
           </Link>
         </>
       )}
-      <h2> {newClassId} Class</h2>
-      {classData && teacherList ? (
-        <div>
-          Taught By:{" "}
-          {classData.teacher &&
-            teacherList
-              .filter((teacher) => teacher.id === classData.teacher.id)
-              .map((teacher) => teacher.name)}
-        </div>
-      ) : (
-        <div>Loading...</div>
-      )}
+      <h2>
+        {" "}
+        {classData && teacherList ? (
+          <div>
+            {classData.teacher &&
+              teacherList
+                .filter((teacher) => teacher.id === classData.teacher.id)
+                .map((teacher) => teacher.name)}
+            <span>'s {newClassId} Class</span>
+          </div>
+        ) : (
+          <div>Loading...</div>
+        )}
+      </h2>
       {classData && studentList ? (
         <div>
           <h3>Students</h3>
@@ -234,8 +225,7 @@ function CLASS_PAGE() {
             if (matchingClass) {
               return (
                 <div key={student.id}>
-                  <h4>{student.name}</h4>
-                  <p>Grade: {matchingClass.grade}</p>
+                  <p>{student.name + ": " + matchingClass.grade + "%"}</p>
                 </div>
               );
             }
@@ -253,147 +243,163 @@ function CLASS_PAGE() {
       )}
       <footer>
         <h2>Edit A Student</h2>
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <Box
-            sx={{
-              width: 225,
-            }}
-          >
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Student</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={prevName}
-                label="Previous Name"
-                onChange={(e) => setPrevName(e.target.value)}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr 1fr",
+            justifyContent: "center",
+          }}
+        >
+          <div>
+            <h4>Change Student Grade</h4>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <Box
+                sx={{
+                  width: 225,
+                }}
               >
-                {studentList.map((student) => {
-                  const matchingClass = student.classesTaken.find(
-                    (classTaken) => classTaken.class.id === classData.id
-                  );
-                  if (matchingClass) {
-                    return (
-                      <MenuItem key={student.id} value={student.name}>
-                        {" "}
-                        {student.name}{" "}
-                      </MenuItem>
-                    );
-                  }
-                  return null;
-                })}
-              </Select>
-            </FormControl>
-          </Box>
-          <TextField
-            value={newGrade}
-            onChange={(e) => setNewGrade(e.target.value)}
-            label="New Grade"
-            variant="outlined"
-            sx={{ width: 225 }}
-          />
-        </div>
-        <br></br>
-        <div>
-          <Button variant="contained" onClick={() => editStudent()}>
-            Submit Changes
-          </Button>
-        </div>
-        <h2>Add A Student</h2>
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <Box
-            sx={{
-              width: 225,
-            }}
-          >
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Student</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={addStudentName}
-                label="Previous Name"
-                onChange={(e) => setAddStudentName(e.target.value)}
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">Student</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={prevName}
+                    label="Previous Name"
+                    onChange={(e) => setPrevName(e.target.value)}
+                  >
+                    {studentList.map((student) => {
+                      const matchingClass = student.classesTaken.find(
+                        (classTaken) => classTaken.class.id === classData.id
+                      );
+                      if (matchingClass) {
+                        return (
+                          <MenuItem key={student.id} value={student.name}>
+                            {" "}
+                            {student.name}{" "}
+                          </MenuItem>
+                        );
+                      }
+                      return null;
+                    })}
+                  </Select>
+                </FormControl>
+              </Box>
+              <TextField
+                value={newGrade}
+                onChange={(e) => setNewGrade(e.target.value)}
+                label="New Grade"
+                variant="outlined"
+                sx={{ width: 225 }}
+              />
+            </div>
+            <br></br>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <div>
+                <Button variant="contained" onClick={() => editStudent()}>
+                  Submit Changes
+                </Button>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h4>Add A Student</h4>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <Box
+                sx={{
+                  width: 225,
+                }}
               >
-                {studentList.map((student) => {
-                  const matchingClass = student.classesTaken.find(
-                    (classTaken) => classTaken.class.id === classData.id
-                  );
-                  if (!matchingClass) {
-                    return (
-                      <MenuItem key={student.id} value={student.name}>
-                        {" "}
-                        {student.name}{" "}
-                      </MenuItem>
-                    );
-                  }
-                  return null;
-                })}
-              </Select>
-            </FormControl>
-          </Box>
-          <TextField
-            value={addGrade}
-            onChange={(e) => setAddGrade(e.target.value)}
-            label="Grade"
-            variant="outlined"
-            sx={{ width: 225 }}
-          />
-        </div>
-        <br></br>
-        <div>
-          <Button
-            style={{ marginBottom: "20px" }}
-            variant="contained"
-            onClick={() => addStudentToClass()}
-          >
-            Add Student
-          </Button>
-        </div>
-
-        <h2>Remove A Student</h2>
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <Box
-            sx={{
-              width: 225,
-            }}
-          >
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Student</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={removeStudentName}
-                label="Previous Name"
-                onChange={(e) => setRemoveStudentName(e.target.value)}
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">Student</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={addStudentName}
+                    label="Previous Name"
+                    onChange={(e) => setAddStudentName(e.target.value)}
+                  >
+                    {studentList.map((student) => {
+                      const matchingClass = student.classesTaken.find(
+                        (classTaken) => classTaken.class.id === classData.id
+                      );
+                      if (!matchingClass) {
+                        return (
+                          <MenuItem key={student.id} value={student.name}>
+                            {" "}
+                            {student.name}{" "}
+                          </MenuItem>
+                        );
+                      }
+                      return null;
+                    })}
+                  </Select>
+                </FormControl>
+              </Box>
+              <TextField
+                value={addGrade}
+                onChange={(e) => setAddGrade(e.target.value)}
+                label="Grade"
+                variant="outlined"
+                sx={{ width: 225 }}
+              />
+            </div>
+            <br></br>
+            <div>
+              <Button
+                style={{ marginBottom: "20px" }}
+                variant="contained"
+                onClick={() => addStudentToClass()}
               >
-                {studentList.map((student) => {
-                  const matchingClass = student.classesTaken.find(
-                    (classTaken) => classTaken.class.id === classData.id
-                  );
-                  if (matchingClass) {
-                    return (
-                      <MenuItem key={student.id} value={student.name}>
-                        {" "}
-                        {student.name}{" "}
-                      </MenuItem>
-                    );
-                  }
-                  return null;
-                })}
-              </Select>
-            </FormControl>
-          </Box>
-        </div>
-        <br></br>
-        <div>
-          <Button
-            style={{ marginBottom: "20px" }}
-            variant="contained"
-            onClick={() => removeStudentFromClass()}
-          >
-            Remove Student
-          </Button>
+                Add Student
+              </Button>
+            </div>
+          </div>
+          <div>
+            <h4>Remove A Student</h4>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <Box
+                sx={{
+                  width: 225,
+                }}
+              >
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">Student</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={removeStudentName}
+                    label="Previous Name"
+                    onChange={(e) => setRemoveStudentName(e.target.value)}
+                  >
+                    {studentList.map((student) => {
+                      const matchingClass = student.classesTaken.find(
+                        (classTaken) => classTaken.class.id === classData.id
+                      );
+                      if (matchingClass) {
+                        return (
+                          <MenuItem key={student.id} value={student.name}>
+                            {" "}
+                            {student.name}{" "}
+                          </MenuItem>
+                        );
+                      }
+                      return null;
+                    })}
+                  </Select>
+                </FormControl>
+              </Box>
+            </div>
+            <br></br>
+            <div>
+              <Button
+                style={{ marginBottom: "20px" }}
+                variant="contained"
+                onClick={() => removeStudentFromClass()}
+              >
+                Remove Student
+              </Button>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
