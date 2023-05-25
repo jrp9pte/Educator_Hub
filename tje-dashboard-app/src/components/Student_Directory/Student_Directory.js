@@ -80,7 +80,7 @@ function Student_Directory() {
   return (
     <div style={{ textAlign: "center" }}>
       <h1>Student Directory</h1>
-      <Link to="/">Home</Link>
+      <Link to="/Home">Home</Link>
       <header>
         <br></br>
       <Button

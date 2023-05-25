@@ -2,8 +2,7 @@ import { Link } from "react-router-dom";
 
 import React from 'react';
 import {Container, Row, Col, Image} from "react-bootstrap"
-import LoginForm from "../AUTH/LoginForm";
-
+import Login from "../AUTH/Login";
 function HOME() {
   return (
     	<div style={{ textAlign: "center" }}>
@@ -15,7 +14,6 @@ function HOME() {
           <Link to="/teacher_directory">Teacher Directory</Link>
           <span style={{ margin: "0 10px" }}>|</span>
           <Link to="/calendar">Calendar</Link>
-          <LoginForm />
         </div>
   );
 }

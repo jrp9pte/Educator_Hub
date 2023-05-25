@@ -1,6 +1,9 @@
 // import { render } from "react-dom";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home.js";
+//import Signup from './page/Signup';
+//import Login from './page/Login';
+import Login from './components/AUTH/Login'
 import Dashboard from "./pages/Dashboard.js";
 import Calendar from "./pages/Calendar.js";
 import StudentDirectory from "./pages/StudentDirectory.js";
@@ -12,7 +15,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/Home" element={<Home />} />
         <Route path="overall_dashboard">
           <Route index element={<Dashboard />} />
           <Route path="class_page/:id" element={<ClassPage />} />
@@ -40,7 +44,7 @@ function App() {
               >
                 Page Not Found
               </h1>
-              <Link to="/">Home Page</Link>
+              <Link to="/Home">Home Page</Link>
             </div>
           }
         />

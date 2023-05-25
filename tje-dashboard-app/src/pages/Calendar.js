@@ -6,7 +6,7 @@ function Calendar() {
     return(
     <div style={{ textAlign: "center" }}>
         <h1>Calendar</h1>
-        <Link to="/">Home</Link>
+        <Link to="/Home">Home</Link>
         <Row>
         <Col>
           <iframe

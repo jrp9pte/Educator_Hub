@@ -77,7 +77,7 @@ function DASH_BOARD() {
     <div style={{ textAlign: "center" }}>
       <h1>Overall Dashboard</h1>
       <ButtonGroup variant="contained" aria-label="outlined button group">
-        <Link to="/" style={{ textDecoration: 'none' }}>
+        <Link to="/Home" style={{ textDecoration: 'none' }}>
           <Button>Home</Button>
         </Link>
       </ButtonGroup>

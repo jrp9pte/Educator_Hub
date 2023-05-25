@@ -108,7 +108,7 @@ function TEACHER_DIRECTORY() {
   return (
     <div style={{ textAlign: "center" }}>
       <h1>Teacher Directory</h1>
-      <Link to="/">
+      <Link to="/Home">
         <Button variant="contained">Home</Button>
       </Link>
       <br></br>

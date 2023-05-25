@@ -44,7 +44,7 @@ function TEACHER_DASHBOARD() {
       <h1>Teacher Dashboard</h1>
 
       <ButtonGroup variant="contained" aria-label="outlined button group">
-        <Link to="/" style={{ marginRight: "10px" }}>
+        <Link to="/Home" style={{ marginRight: "10px" }}>
           <Button>Home</Button>
         </Link>
         <Link onClick={() => navigate(-1)}>
