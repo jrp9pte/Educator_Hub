@@ -1,9 +1,21 @@
 import { Link } from "react-router-dom";
 import { useNavigate, useParams, useMatch } from "react-router-dom";
 import Button from "@mui/material/Button";
-import { doc, getDoc, collection, getDocs } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  collection,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "../../firebase.js";
 import { useEffect, useState } from "react";
+import MenuItem from "@mui/material/MenuItem";
+import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import TextField from "@mui/material/TextField";
 
 function CLASS_PAGE() {
   const teacherCollectionRef = collection(db, "Teachers");
@@ -23,6 +35,8 @@ function CLASS_PAGE() {
   const teacherDashboardAndClassMatch = useMatch(
     "/teacher_dashboard/:id/:id/class_page/:id"
   );
+  const [prevName, setPrevName] = useState("");
+  const [newGrade, setNewGrade] = useState();
 
   useEffect(() => {
     const getTeacherList = async () => {
@@ -80,6 +94,42 @@ function CLASS_PAGE() {
     getClassData();
   }, []);
 
+  async function handleClick() {
+    try {
+      let changedStudent = studentList.filter(
+        (student) => student.name === prevName
+      );
+      setPrevName("");
+
+      const docRef = doc(db, "Students", changedStudent[0].id);
+      const docSnap = await getDoc(docRef);
+      const updatedStudent = docSnap.data();
+
+      if (updatedStudent) {
+        const classesTaken = [...updatedStudent.classesTaken];
+        const updatedClassesTaken = classesTaken.map((classTaken) => {
+          if (classTaken.class.id === classData.id) {
+            return {
+              ...classTaken,
+              grade: newGrade,
+            };
+          }
+          return classTaken;
+        });
+        setNewGrade("");
+
+        await updateDoc(docRef, {
+          classesTaken: updatedClassesTaken,
+        });
+        console.log("Document updated successfully.");
+      } else {
+        console.log("Student not found.");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   return (
     <div style={{ textAlign: "center" }}>
       <h1>Class Page</h1>
@@ -133,6 +183,55 @@ function CLASS_PAGE() {
       ) : (
         <div></div>
       )}
+      <footer>
+        <h2>Edit A Student</h2>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Box
+            sx={{
+              width: 225,
+            }}
+          >
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Student</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={prevName}
+                label="Previous Name"
+                onChange={(e) => setPrevName(e.target.value)}
+              >
+                {studentList.map((student) => {
+                  const matchingClass = student.classesTaken.find(
+                    (classTaken) => classTaken.class.id === classData.id
+                  );
+                  if (matchingClass) {
+                    return (
+                      <MenuItem key={student.id} value={student.name}>
+                        {" "}
+                        {student.name}{" "}
+                      </MenuItem>
+                    );
+                  }
+                  return null;
+                })}
+              </Select>
+            </FormControl>
+          </Box>
+          <TextField
+            value={newGrade}
+            onChange={(e) => setNewGrade(e.target.value)}
+            label="New Grade"
+            variant="outlined"
+            sx={{ width: 225 }}
+          />
+        </div>
+        <br></br>
+        <div>
+          <Button variant="contained" onClick={() => handleClick()}>
+            Submit Changes
+          </Button>
+        </div>
+      </footer>
     </div>
   );
 }
