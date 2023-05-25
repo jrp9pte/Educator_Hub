@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 function CLASS_PAGE() {
   const teacherCollectionRef = collection(db, "Teachers");
   const [teacherList, setTeacherList] = useState([]);
+  const [classData, setClassData] = useState();
 
   const { className } = useParams();
   const { classID } = useParams();
@@ -18,27 +19,6 @@ function CLASS_PAGE() {
   const teacherDashboardAndClassMatch = useMatch(
     "/teacher_dashboard/:id/class_page/:id"
   );
-
-  useEffect(() => {
-    const getClassData = async () => {
-      try {
-        const docSnapshot = await getDoc(docRef);
-        if (docSnapshot.exists()) {
-          const data = {
-            ...docSnapshot.data(),
-            id: docSnapshot.id,
-          };
-          console.log(data);
-        } else {
-          console.log("Document does not exist");
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    getClassData();
-  }, []);
 
   useEffect(() => {
     const getTeacherList = async () => {
@@ -57,6 +37,27 @@ function CLASS_PAGE() {
     getTeacherList();
   }, []);
 
+  useEffect(() => {
+    const getClassData = async () => {
+      try {
+        const docSnapshot = await getDoc(docRef);
+        if (docSnapshot.exists()) {
+          const data = {
+            ...docSnapshot.data(),
+            id: docSnapshot.id,
+          };
+          setClassData(data);
+        } else {
+          console.log("Document does not exist");
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    getClassData();
+  }, []);
+
   return (
     <div style={{ textAlign: "center" }}>
       <h1>Class Page</h1>
@@ -70,7 +71,26 @@ function CLASS_PAGE() {
         </>
       )}
       <h2> {newClassId} Class</h2>
-      <div>Taught By: </div>
+      {console.log("classData:", classData)}
+      {console.log("teacherList:", teacherList)}
+      {classData && teacherList ? (
+        <div>
+          Taught By:{" "}
+          {classData.teacher &&
+            teacherList
+              .filter((teacher) => teacher.id === classData.teacher.id)
+              .map((teacher) => teacher.name)}
+        </div>
+      ) : (
+        <div>Loading...</div>
+      )}
+      {classData && teacherList ? (
+        <div>
+          <h3>Students:</h3>
+        </div>
+      ) : (
+        <div>Loading...</div>
+      )}
     </div>
   );
 }
