@@ -10,46 +10,62 @@ import StudentDirectory from "./pages/StudentDirectory.js";
 import TeacherDirectory from "./pages/TeacherDirectory.js";
 import TeacherDashboard from "./pages/TeacherDashboard.js";
 import ClassPage from "./pages/ClassPage.js";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+});
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/Home" element={<Home />} />
-        <Route path="overall_dashboard">
-          <Route index element={<Dashboard />} />
-          <Route path="class_page/:id" element={<ClassPage />} />
-        </Route>
-        <Route path="calendar" element={<Calendar />} />       
-        <Route path="student_directory" element={<StudentDirectory />} />
-        <Route path="teacher_directory" element={<TeacherDirectory />} />
-        <Route
-          path="teacher_dashboard/:teacherID"
-          element={<TeacherDashboard />}
-        />
-        <Route
-          path="teacher_dashboard/:teacherID/class_page/:classId"
-          element={<ClassPage />}
-        />
-        <Route
-          path="*"
-          element={
-            <div style={{ textAlign: "center" }}>
-              <h1
-                style={{
-                  fontWeight: "bold",
-                  fontSize: "50px",
-                }}
-              >
-                Page Not Found
-              </h1>
-              <Link to="/Home">Home Page</Link>
-            </div>
-          }
-        />
-      </Routes>
-    </BrowserRouter>
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
+      <div>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/Home" element={<Home />} />
+            <Route path="overall_dashboard">
+              <Route index element={<Dashboard />} />
+              <Route
+                path=":classID/class_page/:className"
+                element={<ClassPage />}
+              />
+            </Route>
+            <Route path="calendar" element={<Calendar />} />
+            <Route path="student_directory" element={<StudentDirectory />} />
+            <Route path="teacher_directory" element={<TeacherDirectory />} />
+            <Route
+              path="teacher_dashboard/:teacherID"
+              element={<TeacherDashboard />}
+            />
+            <Route
+              path="teacher_dashboard/:teacherID/:classID/class_page/:className"
+              element={<ClassPage />}
+            />
+            <Route
+              path="*"
+              element={
+                <div style={{ textAlign: "center" }}>
+                  <h1
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "50px",
+                    }}
+                  >
+                    Page Not Found
+                  </h1>
+                  <Link to="/Home">Home Page</Link>
+                </div>
+              }
+            />
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </ThemeProvider>
   );
 }
 
