@@ -12,9 +12,8 @@ import {
 } from "firebase/firestore";
 import Button from "@mui/material/Button";
 import { ButtonGroup, TextField } from "@mui/material";
-import Stack from '@mui/material/Stack';
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 
 function DASH_BOARD() {
@@ -35,7 +34,6 @@ function DASH_BOARD() {
         id: doc.id,
       }));
       setClassList(filteredData);
-      // console.log(filteredData);
     } catch (err) {
       console.error(err);
     }
@@ -51,8 +49,7 @@ function DASH_BOARD() {
       const teacherSnapshot = await getDocs(teacherQuery);
 
       let teacherRef;
-      if (newTeacherName == "" || newClassName == "") {
-        console.log("input teacher/class name");
+      if (newTeacherName === "" || newClassName === "") {
       } else {
         if (teacherSnapshot.empty) {
           teacherRef = await addDoc(teacherCollectionRef, {
@@ -89,7 +86,7 @@ function DASH_BOARD() {
     <div style={{ textAlign: "center" }}>
       <h1>Dashboard</h1>
       <ButtonGroup variant="contained" aria-label="outlined button group">
-        <Link to="/Home" style={{ textDecoration: 'none' }}>
+        <Link to="/Home" style={{ textDecoration: "none" }}>
           <Button>Home</Button>
         </Link>
       </ButtonGroup>
@@ -98,48 +95,69 @@ function DASH_BOARD() {
       <div>
         {classList.map((target) => {
           return (
-            <div style={{ display: "flex",   justifyContent: "center" }}
-            > 
+            <div style={{ display: "flex", justifyContent: "center" }}>
               <div
                 key={target.id}
-                style={{ margin: "2px" , display: "flex" , justifyContent: "center" }}
+                style={{
+                  margin: "2px",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
               >
-                <div style={{ margin: "2px" , display: "flex" , justifyContent: "space-between" }}>
-                  <div style={{ display: "flex", margin: "auto", marginRight: "1px"  ,padding:"3px" , justifyContent:"center"}}>
+                <div
+                  style={{
+                    margin: "2px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      margin: "auto",
+                      marginRight: "1px",
+                      padding: "3px",
+                      justifyContent: "center",
+                    }}
+                  >
                     <Link
                       to={target.id + "/class_page/" + target.name}
-                      style={{ textDecoration: "none", color:"#009688", margin: "auto", margin: "5px" }}
+                      style={{
+                        textDecoration: "none",
+                        color: "#009688",
+                        margin: "auto",
+                      }}
                     >
                       <Button
                         variant="outline"
-                        style={{ display: "flex", margin: "auto", maxWidth:"100px", minWidth:"100px" }}
+                        style={{
+                          display: "flex",
+                          margin: "auto",
+                          maxWidth: "100px",
+                          minWidth: "100px",
+                        }}
                       >
                         {target.name}
                       </Button>
                     </Link>
-                  </div>
-                    
-                  {" "}
-                    <IconButton
-                      aria-label="delete" size="large"
-                      onClick={() => handleDeleteClass(target.id)}
-                      // variant="outlined"
-                      style={{ margin: "auto" }}
-                    >
-                      <DeleteIcon fontSize="inherit" />
-                      
-                    </IconButton>
-                  </div>
-                
+                  </div>{" "}
+                  <IconButton
+                    aria-label="delete"
+                    size="large"
+                    onClick={() => handleDeleteClass(target.id)}
+                    // variant="outlined"
+                    style={{ margin: "auto" }}
+                  >
+                    <DeleteIcon fontSize="inherit" />
+                  </IconButton>
+                </div>
               </div>
             </div>
           );
         })}
-
       </div>
       <div>
-      <h2> Add a Class </h2>
-        
+        <h2> Add a Class </h2>
         <TextField
           type="text"
           value={newClassName}
