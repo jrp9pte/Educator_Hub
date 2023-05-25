@@ -1,36 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { db } from './../../firebase.js';
-import { collection, getDocs, addDoc } from 'firebase/firestore';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import { TextField } from '@mui/material';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { db } from "./../../firebase.js";
+import { collection, getDocs, addDoc } from "firebase/firestore";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import { TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 
-
-
 async function addNewStudent(studentName, studentAge) {
-  const docRef = await addDoc(collection(db, "Students"), {
+  await addDoc(collection(db, "Students"), {
     name: studentName,
-    age: studentAge
-    // must add the class and the grade also 
+    age: studentAge,
+    // must add the class and the grade also
     // Maybe make class a dropdown menu attached to the class id
   });
 }
 
-
-function GetClass (classes, id) {
+function GetClass(classes, id) {
   let className = "";
 
-  classes.filter(cla => cla.id  === id).map(filteredClass => (
-    className = filteredClass.name
-  ));
-
+  classes
+    .filter((cla) => cla.id === id)
+    .map((filteredClass) => (className = filteredClass.name));
 
   return className;
-
 }
 function Student_Directory() {
   const studentColRef = collection(db, "Students");
@@ -51,7 +46,6 @@ function Student_Directory() {
           id: doc.id,
         }));
         setClassList(filteredData);
-        console.log(filteredData);
       } catch (err) {
         console.log(err);
       }
@@ -69,7 +63,6 @@ function Student_Directory() {
           id: doc.id,
         }));
         setStudentList(filteredData);
-        console.log(filteredData);
       } catch (err) {
         console.log(err);
       }
@@ -83,18 +76,18 @@ function Student_Directory() {
       <Link to="/Home">Home</Link>
       <header>
         <br></br>
-      <Button
+        <Button
           variant="outlined"
           onClick={() => {
             addNewStudent(studentName, studentAge);
             setStudentAdded(!studentAdded);
           }}
         >
-          Add New Student: 
+          Add New Student:
         </Button>
         <br></br>
         <br></br>
-      <TextField
+        <TextField
           value={studentName}
           onChange={(e) => setStudentName(e.target.value)}
           label="Student Name"
@@ -112,37 +105,32 @@ function Student_Directory() {
           label="Class"
           variant="outlined"
         />
-        
       </header>
       <div>
         <br></br>
-        <Box sx= {{ minWidth : 275}}>
-          
-        {studentList.map((data) => (
-          <div key={data.id}>
-            <Card variant = "outlined">
-          <React.Fragment>
-            <CardContent>
-              <Typography sx={{ fontSize: 16 }} gutterBottom>
-              {data.name}, Age: {data.age}
-              </Typography>
+        <Box sx={{ minWidth: 275 }}>
+          {studentList.map((data) => (
+            <div key={data.id}>
+              <Card variant="outlined">
+                <React.Fragment>
+                  <CardContent>
+                    <Typography sx={{ fontSize: 16 }} gutterBottom>
+                      {data.name}, Age: {data.age}
+                    </Typography>
+                    <br></br>
+                    <Typography sx={{ fontSize: 14 }}>
+                      Classes Taken:
+                      {data.classesTaken.map((c) => (
+                        <div key={c.id}>{GetClass(classList, c.class.id)}</div>
+                      ))}
+                    </Typography>
+                    <br></br>
+                  </CardContent>
+                </React.Fragment>
+              </Card>
               <br></br>
-              <Typography  sx= {{ fontSize: 14}} >
-              Classes Taken: 
-              {data.classesTaken.map( (c) => (
-                <div key = {c.id}>
-                  {GetClass(classList, c.class.id)}
-                </div>
-              ))}
-              </Typography>
-          <br></br>
-          </CardContent>
-        </React.Fragment>
-        </Card>
-        <br></br>
-        </div>
-        ))}
-        
+            </div>
+          ))}
         </Box>
       </div>
     </div>

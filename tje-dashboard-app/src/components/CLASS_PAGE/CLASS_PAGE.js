@@ -20,17 +20,15 @@ import TextField from "@mui/material/TextField";
 function CLASS_PAGE() {
   const [change, setChange] = useState(false);
 
-  const teacherCollectionRef = collection(db, "Teachers");
   const [teacherList, setTeacherList] = useState([]);
 
-  const studentCollectionRef = collection(db, "Students");
   const [studentList, setStudentList] = useState([]);
 
   const [classData, setClassData] = useState();
 
   const { className } = useParams();
   const { classID } = useParams();
-  const docRef = doc(db, "Classes", classID);
+
   const newClassId = className.charAt(0).toUpperCase() + className.slice(1);
   const navigate = useNavigate();
   const teacherDashboardMatch = useMatch("/teacher_dashboard");
@@ -47,6 +45,7 @@ function CLASS_PAGE() {
 
   useEffect(() => {
     const getTeacherList = async () => {
+      const teacherCollectionRef = collection(db, "Teachers");
       try {
         const data = await getDocs(teacherCollectionRef);
         const filteredData = data.docs.map((doc) => ({
@@ -64,6 +63,7 @@ function CLASS_PAGE() {
 
   useEffect(() => {
     const getStudentList = async () => {
+      const studentCollectionRef = collection(db, "Students");
       try {
         const data = await getDocs(studentCollectionRef);
         const filteredData = data.docs.map((doc) => ({
@@ -71,7 +71,6 @@ function CLASS_PAGE() {
           id: doc.id,
         }));
         setStudentList(filteredData);
-        console.log(filteredData);
       } catch (err) {
         console.log(err);
       }
@@ -82,6 +81,7 @@ function CLASS_PAGE() {
 
   useEffect(() => {
     const getClassData = async () => {
+      const docRef = doc(db, "Classes", classID);
       try {
         const docSnapshot = await getDoc(docRef);
         if (docSnapshot.exists()) {
@@ -90,8 +90,6 @@ function CLASS_PAGE() {
             id: docSnapshot.id,
           };
           setClassData(data);
-        } else {
-          console.log("Document does not exist");
         }
       } catch (err) {
         console.log(err);
@@ -99,7 +97,7 @@ function CLASS_PAGE() {
     };
 
     getClassData();
-  }, []);
+  }, [classID]);
 
   async function editStudent() {
     try {
@@ -129,9 +127,6 @@ function CLASS_PAGE() {
           classesTaken: updatedClassesTaken,
         });
         setChange(!change);
-        console.log("Document updated successfully.");
-      } else {
-        console.log("Student not found.");
       }
     } catch (err) {
       console.error(err);
@@ -163,9 +158,6 @@ function CLASS_PAGE() {
           classesTaken: updatedClassesTaken,
         });
         setChange(!change);
-        console.log("Document updated successfully.");
-      } else {
-        console.log("Student not found.");
       }
     } catch (err) {
       console.error(err);
@@ -189,9 +181,6 @@ function CLASS_PAGE() {
         });
         setChange(!change);
         setRemoveStudentName("");
-        console.log("Document updated successfully.");
-      } else {
-        console.log("Student not found.");
       }
     } catch (err) {
       console.error(err);
