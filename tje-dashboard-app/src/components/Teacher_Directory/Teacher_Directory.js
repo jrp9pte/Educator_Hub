@@ -272,7 +272,7 @@ function TEACHER_DIRECTORY() {
       </footer>
     </div>
     </ThemeProvider>
-  );
+    );
 }
 
 export default TEACHER_DIRECTORY;
