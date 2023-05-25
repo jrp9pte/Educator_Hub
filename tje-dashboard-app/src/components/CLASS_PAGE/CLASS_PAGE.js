@@ -36,7 +36,9 @@ function CLASS_PAGE() {
     "/teacher_dashboard/:id/:id/class_page/:id"
   );
   const [prevName, setPrevName] = useState("");
+  const [studentName, setStudentName] = useState("");
   const [newGrade, setNewGrade] = useState();
+  const [grade, setGrade] = useState();
 
   useEffect(() => {
     const getTeacherList = async () => {
@@ -94,7 +96,7 @@ function CLASS_PAGE() {
     getClassData();
   }, []);
 
-  async function handleClick() {
+  async function editStudent() {
     try {
       let changedStudent = studentList.filter(
         (student) => student.name === prevName
@@ -117,6 +119,39 @@ function CLASS_PAGE() {
           return classTaken;
         });
         setNewGrade("");
+
+        await updateDoc(docRef, {
+          classesTaken: updatedClassesTaken,
+        });
+        console.log("Document updated successfully.");
+      } else {
+        console.log("Student not found.");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async function addStudentToClass() {
+    try {
+      let changedStudent = studentList.filter(
+        (student) => student.name === studentName
+      );
+      setStudentName("");
+
+      const docRef = doc(db, "Students", changedStudent[0].id);
+      const docSnap = await getDoc(docRef);
+      const updatedStudent = docSnap.data();
+
+      if (updatedStudent) {
+        const classesTaken = [...updatedStudent.classesTaken];
+        const classRef = doc(db, "Classes", classData.id);
+        const newClass = {
+          class: classRef,
+          grade: grade,
+        };
+        const updatedClassesTaken = [...classesTaken, newClass];
+        setGrade("");
 
         await updateDoc(docRef, {
           classesTaken: updatedClassesTaken,
@@ -227,8 +262,59 @@ function CLASS_PAGE() {
         </div>
         <br></br>
         <div>
-          <Button variant="contained" onClick={() => handleClick()}>
+          <Button variant="contained" onClick={() => editStudent()}>
             Submit Changes
+          </Button>
+        </div>
+        <h2>Add A Student</h2>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Box
+            sx={{
+              width: 225,
+            }}
+          >
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Student</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={studentName}
+                label="Previous Name"
+                onChange={(e) => setStudentName(e.target.value)}
+              >
+                {studentList.map((student) => {
+                  const matchingClass = student.classesTaken.find(
+                    (classTaken) => classTaken.class.id === classData.id
+                  );
+                  if (!matchingClass) {
+                    return (
+                      <MenuItem key={student.id} value={student.name}>
+                        {" "}
+                        {student.name}{" "}
+                      </MenuItem>
+                    );
+                  }
+                  return null;
+                })}
+              </Select>
+            </FormControl>
+          </Box>
+          <TextField
+            value={grade}
+            onChange={(e) => setGrade(e.target.value)}
+            label="Grade"
+            variant="outlined"
+            sx={{ width: 225 }}
+          />
+        </div>
+        <br></br>
+        <div>
+          <Button
+            style={{ marginBottom: "20px" }}
+            variant="contained"
+            onClick={() => addStudentToClass()}
+          >
+            Add Student
           </Button>
         </div>
       </footer>
