@@ -4,7 +4,6 @@ import React from 'react';
 import {Container, Row, Col, Image} from "react-bootstrap"
 import LoginForm from "../AUTH/LoginForm";
 
-
 function HOME() {
   return (
     	<div style={{ textAlign: "center" }}>
@@ -26,6 +25,8 @@ function HOME() {
           ></iframe>
         </Col>
         </Row>
+          <span style={{ margin: "0 10px" }}>|</span>
+          <Link to="/calendar">Calendar</Link>
         </div>
   );
 }
