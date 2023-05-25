@@ -7,12 +7,12 @@ import StudentDirectory from "./pages/StudentDirectory.js";
 import TeacherDirectory from "./pages/TeacherDirectory.js";
 import TeacherDashboard from "./pages/TeacherDashboard.js";
 import ClassPage from "./pages/ClassPage.js";
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
 
 const darkTheme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: "dark",
   },
 });
 
@@ -20,13 +20,16 @@ function App() {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <div  >
-        <BrowserRouter >
+      <div>
+        <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="overall_dashboard">
               <Route index element={<Dashboard />} />
-              <Route path="class_page/:id" element={<ClassPage />} />
+              <Route
+                path=":classID/class_page/:className"
+                element={<ClassPage />}
+              />
             </Route>
             <Route path="calendar" element={<Calendar />} />
             <Route path="student_directory" element={<StudentDirectory />} />
