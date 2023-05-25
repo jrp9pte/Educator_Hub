@@ -2,6 +2,7 @@
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home.js";
 import Dashboard from "./pages/Dashboard.js";
+import Calendar from "./pages/Calendar.js";
 import StudentDirectory from "./pages/StudentDirectory.js";
 import TeacherDirectory from "./pages/TeacherDirectory.js";
 import TeacherDashboard from "./pages/TeacherDashboard.js";
@@ -16,6 +17,7 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path="class_page/:id" element={<ClassPage />} />
         </Route>
+        <Route path="calendar" element={<Calendar />} />       
         <Route path="student_directory" element={<StudentDirectory />} />
         <Route path="teacher_directory" element={<TeacherDirectory />} />
         <Route
