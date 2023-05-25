@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
 
-import React from "react";
-import { Container, Row, Col, Image } from "react-bootstrap";
-import LoginForm from "../AUTH/LoginForm";
+import React from 'react';
+import {Container, Row, Col, Image} from "react-bootstrap"
+import Login from "../AUTH/Login";
 import Button from "@mui/material/Button";
 
 function HOME() {
   return (
-    <div style={{ textAlign: "center" }}>
+    	<div style={{ textAlign: "center" }}>
       <h1>Home Page</h1>
       <Link to="/overall_dashboard">
         <Button variant="contained">Dashboard</Button>
@@ -31,6 +31,7 @@ function HOME() {
       <br></br>
       <LoginForm />
     </div>
+
   );
 }
 

@@ -120,7 +120,7 @@ function TEACHER_DIRECTORY() {
     
     <div style={{ textAlign: "center" , paddingBottom: "100px", padding:"10px" }}>
       <h1>Teacher Directory</h1>
-      <Link to="/">
+      <Link to="/Home">
         <Button variant="contained">Home</Button>
       </Link>
       <br></br>
