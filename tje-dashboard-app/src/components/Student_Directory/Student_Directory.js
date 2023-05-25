@@ -1,24 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { db } from "./../../firebase.js";
-import {
-  collection,
-  getDocs,
-  addDoc,
-  query,
-  where,
-  doc,
-} from "firebase/firestore";
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
-import { TextField } from "@mui/material";
+
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { db } from './../../firebase.js';
+import { collection, getDocs, addDoc, query, where, doc, deleteDoc, updateDoc } from 'firebase/firestore';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import { TextField } from '@mui/material';
 import Button from "@mui/material/Button";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+
 
 async function addNewStudent(studentName, studentAge, sClass, allClass) {
   let classInfo = [];
@@ -40,7 +35,35 @@ async function addNewStudent(studentName, studentAge, sClass, allClass) {
   });
 }
 
-function GetClass(classes, id) {
+
+async function removeStudent (allStudent, studentToRemove) {
+  let delStudent = allStudent.filter(
+    (student) => student.name === studentToRemove
+  );
+
+  const docRef = await deleteDoc(doc(db, "Students", delStudent[0].id));
+
+}
+
+async function editStudent (allStudent, editName, editAge, studentChange) {
+  try {
+    let editS = allStudent.filter(
+    (student) => student.name === studentChange
+  );
+
+
+  const docRef = await updateDoc(doc(db, "Students", editS[0].id), {
+    name: editName,
+    age: editAge
+  });
+  } catch (err) {
+    console.error(err);
+  }
+  
+}
+
+function GetClass (classes, id) {
+
   let className = "";
 
   classes
@@ -52,13 +75,11 @@ function GetClass(classes, id) {
 
 function GetClassId(classes, className) {
   let classId = "";
-  classes
-    .filter((cla) => cla.name === className)
-    .map(
-      (filteredId) =>
-        //classRef = "Classes/" + filteredId.id
-        (classId = filteredId.id)
-    );
+
+  classes.filter(cla => cla.name  === className).map(filteredId => (
+    classId = filteredId.id
+  ));
+
   return classId;
 }
 
@@ -69,6 +90,12 @@ function Student_Directory() {
   const [studentAge, setStudentAge] = useState(0);
   const [studentAdded, setStudentAdded] = useState(false);
   const [studentClass, setStudentClass] = useState([]);
+  const [remStudent, setRemStudent] = useState("");
+  const [studentRemoved, setStudentRemoved] = useState(false);
+  const [newName, setNewName] = useState("");
+  const [newAge, setNewAge] = useState("");
+  const [studentToEdit, setStudentToEdit] = useState("");
+  const [studentEdited, setStudentEdited] = useState(false);
 
   // Handle multiple select
   const handleChange = (event) => {
@@ -97,7 +124,7 @@ function Student_Directory() {
     };
 
     getClassList();
-  }, []);
+  }, [classRef, classList]);
 
   useEffect(() => {
     const getStudentList = async () => {
@@ -114,7 +141,7 @@ function Student_Directory() {
       }
     };
     getStudentList();
-  }, [studentAdded]);
+  }, [studentAdded, studentRemoved, studentEdited, studentColRef]);
 
   return (
     <div style={{ textAlign: "center" }}>
@@ -168,7 +195,92 @@ function Student_Directory() {
           </FormControl>
         </Box>
       </header>
-      <div>
+      <br></br>
+      <br></br>
+
+      <Button
+          variant="outlined"
+          onClick={() => {
+            if(remStudent !== "") {
+            removeStudent(studentList, remStudent);
+            setStudentRemoved(!studentAdded);
+            }
+          }}
+        >
+          Delete Student
+        </Button>
+      <Box
+            >
+              <FormControl size = 'medium' >
+                <InputLabel id="demo-simple-select-label">
+                  Students
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={remStudent}
+                  label="student"
+                  onChange={(e) => setRemStudent(e.target.value)}
+                >
+
+                  {studentList.map((s) => (
+                    <MenuItem key={s.id} value={s.name}>
+                      {" "}
+                      {s.name}{" "}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+
+            <br></br>
+            <br></br>
+            <Button
+          variant="outlined"
+          onClick={() => {
+            if(newName !== "") {
+            editStudent(studentList, newName, newAge, studentToEdit);
+            setStudentEdited(!studentEdited);
+            }
+          }}
+        >
+          Edit student information
+        </Button>
+        <Box
+            >
+              <FormControl size = 'medium' >
+                <InputLabel id="demo-simple-select-label">
+                  Students
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={studentToEdit}
+                  label="student"
+                  onChange={(e) => setStudentToEdit(e.target.value)}
+                >
+
+                  {studentList.map((s) => (
+                    <MenuItem key={s.id} value={s.name}>
+                      {" "}
+                      {s.name}{" "}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+            <TextField
+          value={newName}
+          onChange={(e) => setNewName(e.target.value)}
+          label="New Student Name"
+          variant="outlined"
+        />
+        <TextField
+          value={newAge}
+          onChange={(e) => setNewAge(e.target.value)}
+          label="New student age"
+          variant="outlined"
+        />
         <br></br>
         <Box sx={{ minWidth: 275 }}>
           {studentList.map((data) => (
@@ -194,7 +306,11 @@ function Student_Directory() {
             </div>
           ))}
         </Box>
-      </div>
+
+        
+
+
+
     </div>
   );
 }
