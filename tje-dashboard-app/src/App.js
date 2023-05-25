@@ -28,6 +28,7 @@ function App() {
               <Route index element={<Dashboard />} />
               <Route path="class_page/:id" element={<ClassPage />} />
             </Route>
+            <Route path="calendar" element={<Calendar />} />
             <Route path="student_directory" element={<StudentDirectory />} />
             <Route path="teacher_directory" element={<TeacherDirectory />} />
             <Route
