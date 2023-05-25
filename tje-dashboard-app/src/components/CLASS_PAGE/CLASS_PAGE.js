@@ -89,7 +89,9 @@ function CLASS_PAGE() {
       {(teacherDashboardMatch || teacherDashboardAndClassMatch) && (
         <>
           <span style={{ margin: "0 10px" }}>|</span>
-          <Link onClick={() => navigate(-1)}>Teacher Dashboard</Link>
+          <Link onClick={() => navigate(-1)}>
+            <Button variant="contained">Teacher Dashboard</Button>
+          </Link>
         </>
       )}
       <h2> {newClassId} Class</h2>
