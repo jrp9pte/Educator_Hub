@@ -12,6 +12,9 @@ import {
 } from "firebase/firestore";
 import Button from "@mui/material/Button";
 import { ButtonGroup, TextField } from "@mui/material";
+import Stack from '@mui/material/Stack';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 function DASH_BOARD() {
   const [classList, setClassList] = useState([]);
@@ -33,7 +36,7 @@ function DASH_BOARD() {
       setClassList(filteredData);
       // console.log(filteredData);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -68,7 +71,7 @@ function DASH_BOARD() {
         getClassList();
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -83,62 +86,79 @@ function DASH_BOARD() {
 
   return (
     <div style={{ textAlign: "center" }}>
-      <h1>Overall Dashboard</h1>
+      <h1>Dashboard</h1>
       <ButtonGroup variant="contained" aria-label="outlined button group">
         <Link to="/" style={{ textDecoration: "none" }}>
           <Button>Home</Button>
         </Link>
       </ButtonGroup>
       <br></br>
-      <br></br>
-      <TextField
-        type="text"
-        value={newClassName}
-        onChange={(e) => setNewClassName(e.target.value)}
-        placeholder="Enter new class name"
-      />{" "}
-      <TextField
-        value={newTeacherName}
-        onChange={(e) => setNewTeacherName(e.target.value)}
-        placeholder="Enter teacher's name"
-      />
-      <Button
-        onClick={handleAddClass}
-        variant="outlined"
-        style={{ marginLeft: "10px", marginTop: "8px" }}
-      >
-        Add Class
-      </Button>
-      <br></br>
-      <br></br>
+      <h2> Current Classes</h2>
       <div>
         {classList.map((target) => {
           return (
-            <div
-              key={target.id}
-              style={{ marginRight: "100px", marginBottom: "10px" }}
-            >
-              <Link
-                to={target.id + "/class_page/" + target.name}
-                style={{ textDecoration: "none" }}
+            <div style={{ display: "flex",   justifyContent: "center" }}
+            > 
+              <div
+                key={target.id}
+                style={{ margin: "2px" , display: "flex" , justifyContent: "center" }}
               >
-                <Button
-                  variant="outline"
-                  style={{ display: "flex", margin: "auto", marginTop: "8px" }}
-                >
-                  {target.name}
-                </Button>
-              </Link>
-              <Button
-                onClick={() => handleDeleteClass(target.id)}
-                variant="outlined"
-                style={{ marginLeft: "200px", marginTop: "-57px" }}
-              >
-                Delete
-              </Button>
+                <div style={{ margin: "2px" , display: "flex" , justifyContent: "space-between" }}>
+                  <div style={{ display: "flex", margin: "auto", marginRight: "1px"  ,padding:"3px" , justifyContent:"center"}}>
+                    <Link
+                      to={target.id + "/class_page/" + target.name}
+                      style={{ textDecoration: "none", color:"#009688", margin: "auto", margin: "5px" }}
+                    >
+                      <Button
+                        variant="outline"
+                        style={{ display: "flex", margin: "auto", maxWidth:"100px", minWidth:"100px" }}
+                      >
+                        {target.name}
+                      </Button>
+                    </Link>
+                  </div>
+                    
+                  {" "}
+                    <IconButton
+                      aria-label="delete" size="large"
+                      onClick={() => handleDeleteClass(target.id)}
+                      // variant="outlined"
+                      style={{ margin: "auto" }}
+                    >
+                      <DeleteIcon fontSize="inherit" />
+                      
+                    </IconButton>
+                  </div>
+                
+              </div>
             </div>
           );
         })}
+
+      </div>
+      <div>
+      <h2> Add a Class </h2>
+        
+        <TextField
+          type="text"
+          value={newClassName}
+          onChange={(e) => setNewClassName(e.target.value)}
+          placeholder="Enter new class name"
+        />{" "}
+        <TextField
+          value={newTeacherName}
+          onChange={(e) => setNewTeacherName(e.target.value)}
+          placeholder="Enter teacher's name"
+        />
+        <Button
+          onClick={handleAddClass}
+          variant="outlined"
+          style={{ marginLeft: "10px", marginTop: "8px" }}
+        >
+          Add Class
+        </Button>
+        <h4>Note: You can't add a class without a teacher</h4>
+        <br></br>
       </div>
     </div>
   );
