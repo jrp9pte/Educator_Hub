@@ -104,13 +104,32 @@ function CLASS_PAGE() {
       ) : (
         <div>Loading...</div>
       )}
-      {classData && teacherList ? (
+      {classData && studentList ? (
         <div>
           <h3>Students</h3>
-          {}
+          {studentList.map((student) => {
+            const matchingClass = student.classesTaken.find(
+              (classTaken) => classTaken.class.id === classData.id
+            );
+            if (matchingClass) {
+              return (
+                <div key={student.id}>
+                  <h4>{student.name}</h4>
+                  <p>Grade: {matchingClass.grade}</p>
+                </div>
+              );
+            }
+            return null;
+          })}
+          {studentList.every(
+            (student) =>
+              !student.classesTaken.find(
+                (classTaken) => classTaken.class.id === classData.id
+              )
+          ) && <p>No Students Taking Class</p>}
         </div>
       ) : (
-        <div>Loading...</div>
+        <div></div>
       )}
     </div>
   );
