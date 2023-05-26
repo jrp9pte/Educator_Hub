@@ -226,7 +226,7 @@ function Student_Directory() {
                 <TextField
                   value={studentAge}
                   onChange={(e) => setStudentAge(e.target.value)}
-                  label="Student age"
+                  label="Student Age"
                   variant="outlined"
                 />
               </div>
