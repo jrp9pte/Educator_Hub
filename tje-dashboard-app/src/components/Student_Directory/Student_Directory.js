@@ -43,6 +43,7 @@ async function addNewStudent(studentName, studentAge, sClass, allClass) {
     age: studentAge,
     classesTaken: classInfo,
   });
+
 }
 
 async function removeStudent(allStudent, studentToRemove) {
@@ -99,6 +100,7 @@ function Student_Directory() {
   const [newAge, setNewAge] = useState("");
   const [studentToEdit, setStudentToEdit] = useState("");
   const [studentEdited, setStudentEdited] = useState(false);
+
 
   // Handle multiple select
   const handleChange = (event) => {
@@ -157,7 +159,9 @@ function Student_Directory() {
       }
     };
     getStudentList();
-  }, [studentAdded, studentRemoved, studentEdited]);
+  }, [studentList, studentRemoved, studentEdited]);
+
+
 
   return (
     <div style={{ textAlign: "center" }}>
@@ -223,22 +227,27 @@ function Student_Directory() {
                 </Box>
               </div>
               <br></br>
+              <div>
               <Button
                 variant="outlined"
                 onClick={() => {
-                  if (studentName !== "") {
+                  if (studentName !== "" && studentAge !== "" && studentClass !== []) {
                     addNewStudent(
                       studentName,
                       studentAge,
                       studentClass,
                       classList
                     );
-                    setStudentAdded(!studentAdded);
+                    setStudentName("");
+                    setStudentAge("");
+                    setStudentClass([]);
                   }
+                  setStudentAdded(!studentAdded);
                 }}
               >
                 Add New Student
               </Button>
+              </div>
             </div>
           </div>
           <div>
@@ -278,7 +287,7 @@ function Student_Directory() {
                   onClick={() => {
                     if (remStudent !== "") {
                       removeStudent(studentList, remStudent);
-                      setStudentRemoved(!studentAdded);
+                      setStudentRemoved(!studentRemoved);
                     }
                   }}
                 >
