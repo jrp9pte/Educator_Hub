@@ -159,7 +159,7 @@ function Student_Directory() {
       }
     };
     getStudentList();
-  }, [studentList, studentRemoved, studentEdited]);
+  }, [studentAdded, studentRemoved, studentEdited]);
 
 
 
