@@ -201,37 +201,67 @@ function CLASS_PAGE() {
     }
   }
 
+  function calculateAverageGrade() {
+    const grades = studentList
+      .filter((student) =>
+        student.classesTaken.find(
+          (classTaken) => classTaken.class.id === classData.id
+        )
+      )
+      .map((student) =>
+        parseInt(
+          student.classesTaken.find(
+            (classTaken) => classTaken.class.id === classData.id
+          ).grade,
+          10
+        )
+      );
+
+    if (grades.length === 0) {
+      return "N/A";
+    }
+
+    const totalGrade = grades.reduce(
+      (accumulator, grade) => accumulator + grade,
+      0
+    );
+    return Math.round(totalGrade / grades.length) + "%";
+  }
+
   return (
     <div style={{ textAlign: "center" }}>
-
-<div
+      <div
+        style={{
+          display: "grid",
+          alignItems: "center",
+          width: "100%",
+          gridTemplateColumns: "1fr 1fr 1fr",
+        }}
+      >
+        <div></div>
+        <h1
           style={{
-            display: "grid",
-            alignItems: "center",
-            width: "100%",
-            gridTemplateColumns: "1fr 1fr 1fr",
+            margin: "auto",
+            maxHeight: "60px",
+            display: "flex",
+            justifyContent: "center",
           }}
         >
-        <div></div>
-        <h1 style={{
-                margin: "auto",
-                maxHeight: "60px",
-                display:"flex", 
-                justifyContent: "center"
-              }}>Class Page</h1>
+          Class Page
+        </h1>
         <div style={{ marginLeft: "auto" }}>
-            <LogoutButton
-              variant="contained"
-              onClick={handleLogout}
-              style={{
-                marginRight: "20px",
-                marginLeft: "20px",
-                marginTop: "15px",
-              }}
-            >
-              Logout
-            </LogoutButton>
-          </div>
+          <LogoutButton
+            variant="contained"
+            onClick={handleLogout}
+            style={{
+              marginRight: "20px",
+              marginLeft: "20px",
+              marginTop: "15px",
+            }}
+          >
+            Logout
+          </LogoutButton>
+        </div>
       </div>
       <Link to="/overall_dashboard">
         <Button variant="contained">Dashboard</Button>
@@ -422,6 +452,7 @@ function CLASS_PAGE() {
       {classData && studentList ? (
         <div>
           <h3>Students</h3>
+          <h4>Average Grade: {calculateAverageGrade()}</h4>
           {studentList.map((student) => {
             const matchingClass = student.classesTaken.find(
               (classTaken) => classTaken.class.id === classData.id
