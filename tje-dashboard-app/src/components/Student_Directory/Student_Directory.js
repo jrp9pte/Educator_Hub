@@ -83,16 +83,6 @@ function GetClass(classes, id) {
   return className.charAt(0).toUpperCase() + className.slice(1);
 }
 
-function GetClassId(classes, className) {
-  let classId = "";
-
-  classes
-    .filter((cla) => cla.name === className)
-    .map((filteredId) => (classId = filteredId.id));
-
-  return classId;
-}
-
 function Student_Directory() {
   const [studentList, setStudentList] = useState([]);
   const [classList, setClassList] = useState([]);
@@ -170,38 +160,44 @@ function Student_Directory() {
   return (
     <div style={{ textAlign: "center" }}>
       <div
+        style={{
+          display: "grid",
+          alignItems: "center",
+          width: "100%",
+          gridTemplateColumns: "1fr 1fr 1fr",
+        }}
+      >
+        <div></div>
+        <h1
           style={{
-            display: "grid",
-            alignItems: "center",
-            width: "100%",
-            gridTemplateColumns: "1fr 1fr 1fr",
+            margin: "auto",
+            maxHeight: "60px",
+            display: "flex",
+            justifyContent: "center",
           }}
         >
-        <div></div>
-        <h1 style={{
-                margin: "auto",
-                maxHeight: "60px",
-                display:"flex", 
-                justifyContent: "center"
-              }}>Student Directory</h1>
+          Student Directory
+        </h1>
         <div style={{ marginLeft: "auto" }}>
-            <LogoutButton
-              variant="contained"
-              onClick={handleLogout}
-              style={{
-                marginRight: "20px",
-                marginLeft: "20px",
-                marginTop: "15px",
-              }}
-            >
-              Logout
-            </LogoutButton>
-          </div>
+          <LogoutButton
+            variant="contained"
+            onClick={handleLogout}
+            style={{
+              marginRight: "20px",
+              marginLeft: "20px",
+              marginTop: "15px",
+            }}
+          >
+            Logout
+          </LogoutButton>
+        </div>
       </div>
-      <div style = {{display:"flex", justifyContent: "center"}}>
-        <Link to="/Home" >
-            <Button color= "primary" variant="contained">Home</Button>
-          </Link>
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <Link to="/Home">
+          <Button color="primary" variant="contained">
+            Home
+          </Button>
+        </Link>
       </div>
       <header>
         <h2>Edit A Student</h2>

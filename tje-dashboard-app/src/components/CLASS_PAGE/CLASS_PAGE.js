@@ -202,30 +202,36 @@ function CLASS_PAGE() {
   }
 
   function calculateAverageGrade() {
-    const grades = studentList
-      .filter((student) =>
-        student.classesTaken.find(
-          (classTaken) => classTaken.class.id === classData.id
-        )
-      )
-      .map((student) =>
-        parseInt(
-          student.classesTaken.find(
-            (classTaken) => classTaken.class.id === classData.id
-          ).grade,
-          10
-        )
+    const grades = [];
+
+    studentList.forEach((student) => {
+      const classTaken = student.classesTaken.find(
+        (classTaken) => classTaken.class.id === classData.id
       );
+
+      if (classTaken && classTaken.grade !== -1) {
+        grades.push(parseInt(classTaken.grade, 10));
+      }
+    });
 
     if (grades.length === 0) {
       return "N/A";
     }
 
-    const totalGrade = grades.reduce(
-      (accumulator, grade) => accumulator + grade,
-      0
-    );
+    let totalGrade = 0;
+    grades.forEach((grade) => {
+      totalGrade += grade;
+    });
+
     return Math.round(totalGrade / grades.length) + "%";
+  }
+
+  function validGrade(matchingClass) {
+    if (matchingClass.grade !== -1) {
+      return matchingClass.grade + "%";
+    } else {
+      return "N/A";
+    }
   }
 
   return (
@@ -460,7 +466,7 @@ function CLASS_PAGE() {
             if (matchingClass) {
               return (
                 <div key={student.id}>
-                  <p>{student.name + ": " + matchingClass.grade + "%"}</p>
+                  <p>{student.name + ": " + validGrade(matchingClass)}</p>
                 </div>
               );
             }

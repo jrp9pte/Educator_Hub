@@ -151,7 +151,6 @@ const DASH_BOARD = () => {
     }
   };
 
-  
   const handleDeleteClass = async (classId) => {
     try {
       await deleteDoc(doc(db, "Classes", classId));
@@ -164,8 +163,7 @@ const DASH_BOARD = () => {
   if (newTeacherNam === "a") {
     return (
       <div style={{ textAlign: "center" }}>
-
-      <div
+        <div
           style={{
             display: "grid",
             alignItems: "center",
@@ -173,14 +171,18 @@ const DASH_BOARD = () => {
             gridTemplateColumns: "1fr 1fr 1fr",
           }}
         >
-        <div></div>
-        <h1 style={{
-                margin: "auto",
-                maxHeight: "60px",
-                display:"flex", 
-                justifyContent: "center"
-              }}>Student Directory</h1>
-        <div style={{ marginLeft: "auto" }}>
+          <div></div>
+          <h1
+            style={{
+              margin: "auto",
+              maxHeight: "60px",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            Dashboard
+          </h1>
+          <div style={{ marginLeft: "auto" }}>
             <LogoutButton
               variant="contained"
               onClick={handleLogout}
@@ -193,17 +195,13 @@ const DASH_BOARD = () => {
               Logout
             </LogoutButton>
           </div>
-      </div>
+        </div>
 
-
-        
         <ButtonGroup variant="contained" aria-label="outlined button group">
           <Link to="/Home" style={{ textDecoration: "none" }}>
             <Button>Home</Button>
           </Link>
         </ButtonGroup>
-
-
 
         <br></br>
         <h2> Current Classes</h2>
