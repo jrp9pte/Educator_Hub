@@ -4,11 +4,25 @@ import { db } from "../../firebase.js";
 import { getDocs, collection, getDoc, doc } from "firebase/firestore";
 import Button from "@mui/material/Button";
 import { ButtonGroup } from "@mui/material";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from '../../firebase';
+import Login from "../AUTH/Login";
+import {  signOut } from "firebase/auth";
 
 function TEACHER_DASHBOARD() {
   const [classList, setClassList] = useState([]);
-
   const navigate = useNavigate();
+ 
+    const handleLogout = () => {               
+        signOut(auth).then(() => {
+        // Sign-out successful.
+            navigate("/");
+            console.log("Signed out successfully")
+        }).catch((error) => {
+        // An error happened.
+        });
+    }
+
   const { teacherID } = useParams();
 
   const [teacherData, setTeacherData] = useState();
@@ -70,6 +84,7 @@ function TEACHER_DASHBOARD() {
           <Button>Teacher Directory</Button>
         </Link>
       </ButtonGroup>
+      <button onClick={handleLogout}>Logout</button>
       <h2>{teacherData ? teacherData.name + "'s Classes" : null}</h2>
       <div>
         {teacherClasses.length === 0 ? (

@@ -21,6 +21,10 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { useNavigate } from 'react-router-dom';
+import {  signOut } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from '../../firebase';
 
 async function addNewStudent(studentName, studentAge, sClass, allClass) {
   let classInfo = [];
@@ -107,6 +111,17 @@ function Student_Directory() {
       typeof value === "string" ? value.split(",") : value
     );
   };
+  const navigate = useNavigate();
+ 
+    const handleLogout = () => {               
+        signOut(auth).then(() => {
+        // Sign-out successful.
+            navigate("/");
+            console.log("Signed out successfully")
+        }).catch((error) => {
+        // An error happened.
+        });
+    }
 
   useEffect(() => {
     const getClassList = async () => {
@@ -149,6 +164,7 @@ function Student_Directory() {
       <Link to="/Home">
         <Button variant="contained">Home</Button>
       </Link>
+      <button onClick={handleLogout}>Logout</button>
       <header>
         <h2>Edit A Student</h2>
         <div

@@ -8,6 +8,7 @@ import {Container, Row, Col, Image} from "react-bootstrap"
 import Login from "../components/AUTH/Login";
 
 const ClassPage = () => {
+  
   const [newTeacherName, setNewTeacherName] = useState("");
  
   useEffect(()=>{
