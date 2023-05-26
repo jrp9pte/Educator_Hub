@@ -10,6 +10,7 @@ import { auth } from "../firebase";
 import Login from "../components/AUTH/Login";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
+import { LogoutButton } from "../components/HOME/HOME";
 
 const Calendar = () => {
   const [newTeacherName, setNewTeacherName] = useState("");
@@ -47,11 +48,46 @@ const Calendar = () => {
   if (newTeacherName === "a") {
     return (
       <div style={{ textAlign: "center" }}>
-        <h1>Calendar</h1>
+
+
+        <div
+          style={{
+            display: "grid",
+            alignItems: "center",
+            width: "100%",
+            gridTemplateColumns: "1fr 1fr 1fr",
+          }} >
+          <div></div>
+          <h1 style={{
+                  margin: "auto",
+                  maxHeight: "60px",
+                  display:"flex", 
+                  justifyContent: "center"
+                }}>Calender
+          </h1>
+          <div style={{ marginLeft: "auto" }}>
+              <LogoutButton
+                variant="contained"
+                onClick={handleLogout}
+                style={{
+                  marginRight: "20px",
+                  marginLeft: "20px",
+                  marginTop: "15px",
+                }}
+              >
+                Logout
+              </LogoutButton>
+          </div>
+        </div>
+
+
+
+
         <Link to="/Home">
           <Button variant="contained">Home</Button>
         </Link>
-        <button onClick={handleLogout}>Logout</button>
+
+
         <Row>
           <Col>
             <iframe

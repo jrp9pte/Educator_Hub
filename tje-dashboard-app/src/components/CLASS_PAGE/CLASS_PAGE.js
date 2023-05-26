@@ -18,7 +18,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import { signOut } from "firebase/auth";
-
+import { LogoutButton } from "../HOME/HOME.js";
 function CLASS_PAGE() {
   const [change, setChange] = useState(false);
 
@@ -203,11 +203,39 @@ function CLASS_PAGE() {
 
   return (
     <div style={{ textAlign: "center" }}>
-      <h1>Class Page</h1>
+
+<div
+          style={{
+            display: "grid",
+            alignItems: "center",
+            width: "100%",
+            gridTemplateColumns: "1fr 1fr 1fr",
+          }}
+        >
+        <div></div>
+        <h1 style={{
+                margin: "auto",
+                maxHeight: "60px",
+                display:"flex", 
+                justifyContent: "center"
+              }}>Class Page</h1>
+        <div style={{ marginLeft: "auto" }}>
+            <LogoutButton
+              variant="contained"
+              onClick={handleLogout}
+              style={{
+                marginRight: "20px",
+                marginLeft: "20px",
+                marginTop: "15px",
+              }}
+            >
+              Logout
+            </LogoutButton>
+          </div>
+      </div>
       <Link to="/overall_dashboard">
         <Button variant="contained">Dashboard</Button>
       </Link>
-      <button onClick={handleLogout}>Logout</button>
       {(teacherDashboardMatch || teacherDashboardAndClassMatch) && (
         <>
           <span style={{ margin: "0 10px" }}>|</span>

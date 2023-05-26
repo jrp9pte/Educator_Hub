@@ -8,6 +8,16 @@ import { styled } from "@mui/material/styles";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
+const LogoutButton = styled(Button)(({ theme }) => ({
+  backgroundColor: "#f5f5f5", // Red color
+  color: "#212121", // White color
+  marginTop: "20px",
+  marginBottom: "15px",
+  "&:hover": {
+    backgroundColor: "#d32f2f", // Darker red color on hover
+  },
+}));
+
 const HOME = () => {
   const [newTeacherName, setNewTeacherName] = useState("");
   const navigate = useNavigate();
@@ -51,15 +61,7 @@ const HOME = () => {
     minHeight: "100vh",
   };
 
-  const LogoutButton = styled(Button)(({ theme }) => ({
-    backgroundColor: "#f5f5f5", // Red color
-    color: "#212121", // White color
-    marginTop: "20px",
-    marginBottom: "15px",
-    "&:hover": {
-      backgroundColor: "#d32f2f", // Darker red color on hover
-    },
-  }));
+  
 
   if (newTeacherName === "a") {
     return (
@@ -140,3 +142,4 @@ const HOME = () => {
 };
 
 export default HOME;
+export {LogoutButton};
