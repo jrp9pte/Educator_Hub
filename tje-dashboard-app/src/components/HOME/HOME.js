@@ -1,11 +1,36 @@
 import { Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import React from "react";
-import { Container, Row, Col, Image } from "react-bootstrap";
+import React, { useState, useEffect } from 'react';
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from '../../firebase';
+import {Container, Row, Col, Image} from "react-bootstrap"
 import Login from "../AUTH/Login";
 import Button from "@mui/material/Button";
 
-function HOME() {
+
+const HOME = () => {
+  const [newTeacherName, setNewTeacherName] = useState("");
+ 
+  useEffect(()=>{
+      onAuthStateChanged(auth, (user) => {
+          if (user) {
+            // User is signed in, see docs for a list of available properties
+            // https://firebase.google.com/docs/reference/js/firebase.User
+            const uid = user.uid;
+            setNewTeacherName("a");
+            // ...
+            console.log("uid", uid)
+          } else {
+            setNewTeacherName("");
+            // User is signed out
+            // ...
+            console.log("user is logged out")
+          }
+        });
+       
+  }, [])
+  if(newTeacherName === "a") {
   return (
     <div style={{ textAlign: "center" }}>
       <h1>Home Page</h1>
@@ -31,6 +56,14 @@ function HOME() {
       <br></br>
     </div>
   );
+}
+else {
+  return(
+  <div style={{ textAlign: "center" }}>
+ {<Login />} 
+  </div>
+  )
+}
 }
 
 export default HOME;
