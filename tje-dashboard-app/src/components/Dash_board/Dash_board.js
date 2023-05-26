@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { db } from "../../firebase.js";
 import {
   getDocs,
@@ -14,9 +13,35 @@ import Button from "@mui/material/Button";
 import { ButtonGroup, TextField } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import React, { useState, useEffect } from 'react';
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from '../../firebase';
+import {Container, Row, Col, Image} from "react-bootstrap"
+import Login from "../AUTH/Login";
 
-function DASH_BOARD() {
+const DASH_BOARD = () => {
+  const [newTeacherNam, setNewTeacherNam] = useState("");
+ 
+  useEffect(()=>{
+      onAuthStateChanged(auth, (user) => {
+          if (user) {
+            // User is signed in, see docs for a list of available properties
+            // https://firebase.google.com/docs/reference/js/firebase.User
+            const uid = user.uid;
+            setNewTeacherNam("a");
+            // ...
+            console.log("uid", uid)
+          } else {
+            setNewTeacherNam("");
+            // User is signed out
+            // ...
+            console.log("user is logged out")
+          }
+        });
+       
+  }, [])
   const [classList, setClassList] = useState([]);
   const [newClassName, setNewClassName] = useState("");
   const [newTeacherName, setNewTeacherName] = useState("");
@@ -81,7 +106,7 @@ function DASH_BOARD() {
       console.log(err);
     }
   };
-
+  if(newTeacherNam === "a") {
   return (
     <div style={{ textAlign: "center" }}>
       <h1>Dashboard</h1>
@@ -181,6 +206,14 @@ function DASH_BOARD() {
       </div>
     </div>
   );
+}
+else {
+  return(
+  <div style={{ textAlign: "center" }}>
+ {<Login />} 
+  </div>
+  )
+}
 }
 
 export default DASH_BOARD;
