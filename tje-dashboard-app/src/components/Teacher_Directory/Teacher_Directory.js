@@ -129,16 +129,9 @@ function TEACHER_DIRECTORY() {
     }
   }
 
-  const darkTheme = createTheme({
-    palette: {
-      mode: "dark",
-    },
-  });
+  
 
   return (
-    <ThemeProvider theme={darkTheme}>
-      <CssBaseline />
-
       <div
         style={{ textAlign: "center", paddingBottom: "100px", padding: "10px" }}
       >
@@ -304,7 +297,6 @@ function TEACHER_DIRECTORY() {
           ) : null}
         </footer>
       </div>
-    </ThemeProvider>
   );
 }
 
