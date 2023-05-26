@@ -230,33 +230,7 @@ function CLASS_PAGE() {
           <div>Loading...</div>
         )}
       </h2>
-      {classData && studentList ? (
-        <div>
-          <h3>Students</h3>
-          {studentList.map((student) => {
-            const matchingClass = student.classesTaken.find(
-              (classTaken) => classTaken.class.id === classData.id
-            );
-            if (matchingClass) {
-              return (
-                <div key={student.id}>
-                  <p>{student.name + ": " + matchingClass.grade + "%"}</p>
-                </div>
-              );
-            }
-            return null;
-          })}
-          {studentList.every(
-            (student) =>
-              !student.classesTaken.find(
-                (classTaken) => classTaken.class.id === classData.id
-              )
-          ) && <p>No Students Taking Class</p>}
-        </div>
-      ) : (
-        <div></div>
-      )}
-      <footer>
+      <header>
         <h2>Edit A Student</h2>
         <div
           style={{
@@ -416,7 +390,33 @@ function CLASS_PAGE() {
             </div>
           </div>
         </div>
-      </footer>
+      </header>
+      {classData && studentList ? (
+        <div>
+          <h3>Students</h3>
+          {studentList.map((student) => {
+            const matchingClass = student.classesTaken.find(
+              (classTaken) => classTaken.class.id === classData.id
+            );
+            if (matchingClass) {
+              return (
+                <div key={student.id}>
+                  <p>{student.name + ": " + matchingClass.grade + "%"}</p>
+                </div>
+              );
+            }
+            return null;
+          })}
+          {studentList.every(
+            (student) =>
+              !student.classesTaken.find(
+                (classTaken) => classTaken.class.id === classData.id
+              )
+          ) && <p>No Students Taking Class</p>}
+        </div>
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 }
