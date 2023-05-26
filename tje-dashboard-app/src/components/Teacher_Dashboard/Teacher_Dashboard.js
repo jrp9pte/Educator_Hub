@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import { ButtonGroup } from "@mui/material";
 import { auth } from "../../firebase";
 import { signOut } from "firebase/auth";
+import { LogoutButton } from "../HOME/HOME.js";
 
 function TEACHER_DASHBOARD() {
   const [classList, setClassList] = useState([]);
@@ -74,7 +75,37 @@ function TEACHER_DASHBOARD() {
 
   return (
     <div style={{ textAlign: "center" }}>
-      <h1>Teacher Dashboard</h1>
+      <div
+          style={{
+            display: "grid",
+            alignItems: "center",
+            width: "100%",
+            gridTemplateColumns: "1fr 1fr 1fr",
+          }}
+        >
+        <div></div>
+        <h1 style={{
+                margin: "auto",
+                maxHeight: "60px",
+                display:"flex", 
+                justifyContent: "center"
+              }}>Teacher Dashboard</h1>
+        <div style={{ marginLeft: "auto" }}>
+            <LogoutButton
+              variant="contained"
+              onClick={handleLogout}
+              style={{
+                marginRight: "20px",
+                marginLeft: "20px",
+                marginTop: "15px",
+              }}
+            >
+              Logout
+            </LogoutButton>
+          </div>
+      </div>
+
+
 
       <ButtonGroup variant="contained" aria-label="outlined button group">
         <Link to="/Home" style={{ marginRight: "10px" }}>
@@ -84,7 +115,6 @@ function TEACHER_DASHBOARD() {
           <Button>Teacher Directory</Button>
         </Link>
       </ButtonGroup>
-      <button onClick={handleLogout}>Logout</button>
       <h2>{teacherData ? teacherData.name + "'s Classes" : null}</h2>
       <div>
         {teacherClasses.length === 0 ? (

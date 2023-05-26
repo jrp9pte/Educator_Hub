@@ -16,12 +16,10 @@ import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
 import { auth } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
-import { color } from "@mui/system";
+import { LogoutButton } from "../HOME/HOME.js";
 
 function TEACHER_DIRECTORY() {
   const [teacherList, setTeacherList] = useState([]);
@@ -129,19 +127,41 @@ function TEACHER_DIRECTORY() {
 
   return (
     <div
-      style={{ textAlign: "center", paddingBottom: "100px", padding: "10px" }}
-    >
-      <h1>Teacher Directory</h1>
-      <Link to="/Home">
-        <Button variant="contained">Home</Button>
-      </Link>
-      <Button
-        variant="contained"
-        style={{ margin: "10px", color: "white", background: "red" }}
-        onClick={handleLogout}
-      >
-        Logout
-      </Button>
+      style={{ textAlign: "center", paddingBottom: "100px"}}>
+      <div
+          style={{
+            display: "grid",
+            alignItems: "center",
+            width: "100%",
+            gridTemplateColumns: "1fr 1fr 1fr",
+          }}>
+        <div></div>
+        <h1 style={{
+                margin: "auto",
+                maxHeight: "60px",
+              }} >Teacher Directory</h1>
+        
+        <div style={{ marginLeft: "auto" }}>
+            <LogoutButton
+              variant="contained"
+              onClick={handleLogout}
+              style={{
+                marginRight: "20px",
+                marginLeft: "20px",
+                marginTop: "15px",
+              }}
+            >
+              Logout
+            </LogoutButton>
+          </div>
+      </div>
+      <div>
+        <Link to="/Home">
+          <Button variant="contained">Home</Button>
+        </Link>
+      </div>
+
+
       <header>
         <h2>Edit a Teacher </h2>
 
