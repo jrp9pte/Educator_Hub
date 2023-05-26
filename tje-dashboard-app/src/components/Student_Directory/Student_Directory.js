@@ -21,10 +21,9 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { useNavigate } from 'react-router-dom';
-import {  signOut } from "firebase/auth";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from '../../firebase';
+import { useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebase";
 
 async function addNewStudent(studentName, studentAge, sClass, allClass) {
   let classInfo = [];
@@ -51,14 +50,14 @@ async function removeStudent(allStudent, studentToRemove) {
     (student) => student.name === studentToRemove
   );
 
-  const docRef = await deleteDoc(doc(db, "Students", delStudent[0].id));
+  await deleteDoc(doc(db, "Students", delStudent[0].id));
 }
 
 async function editStudent(allStudent, editName, editAge, studentChange) {
   try {
     let editS = allStudent.filter((student) => student.name === studentChange);
 
-    const docRef = await updateDoc(doc(db, "Students", editS[0].id), {
+    await updateDoc(doc(db, "Students", editS[0].id), {
       name: editName,
       age: editAge,
     });
@@ -112,16 +111,18 @@ function Student_Directory() {
     );
   };
   const navigate = useNavigate();
- 
-    const handleLogout = () => {               
-        signOut(auth).then(() => {
+
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
         // Sign-out successful.
-            navigate("/");
-            console.log("Signed out successfully")
-        }).catch((error) => {
+        navigate("/");
+        console.log("Signed out successfully");
+      })
+      .catch((error) => {
         // An error happened.
-        });
-    }
+      });
+  };
 
   useEffect(() => {
     const getClassList = async () => {
