@@ -226,7 +226,7 @@ function Student_Directory() {
                 <TextField
                   value={studentAge}
                   onChange={(e) => setStudentAge(e.target.value)}
-                  label="Student age"
+                  label="Student Age"
                   variant="outlined"
                 />
               </div>
@@ -376,7 +376,7 @@ function Student_Directory() {
                 <TextField
                   value={newAge}
                   onChange={(e) => setNewAge(e.target.value)}
-                  label="New student age"
+                  label="New Student Age"
                   variant="outlined"
                 />
               </div>
