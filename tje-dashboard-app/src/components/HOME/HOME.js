@@ -74,9 +74,9 @@ const HOME = () => {
 
 return (
   <div style={containerStyle}>
-   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-      <div>
+    <div style={{ display: 'grid', alignItems: 'center', width: '100%', gridTemplateColumns: "1fr 1fr 1fr" }} >
+      <div></div>
+      <div style={{ display: 'flex', justifyContent: 'center'}}>
         <h1 style={{
           fontFamily: 'Times New Roman, serif',
           fontSize: '48px',
@@ -85,10 +85,8 @@ return (
           textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
           letterSpacing: '2px',
           textTransform: 'uppercase',
-          margin: '0px',
-          paddingBottom: '0px',
+          margin: 'auto',
           maxHeight: "60px",
-          marginLeft:"500px"
         }}>
           Home Page
         </h1>
@@ -99,7 +97,6 @@ return (
         </LogoutButton>
       </div>
     </div>
-  </div>
     <div style={{
       display: "flex",
       justifyContent: "center",
