@@ -248,7 +248,8 @@ function Student_Directory() {
                       {classList.map((oneClass) => (
                         <MenuItem key={oneClass.id} value={oneClass.name}>
                           {" "}
-                          {oneClass.name}{" "}
+                          {oneClass.name.charAt(0).toUpperCase() +
+                            oneClass.name.slice(1)}{" "}
                         </MenuItem>
                       ))}
                     </Select>
