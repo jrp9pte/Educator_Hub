@@ -1,10 +1,7 @@
 import { Link } from "react-router-dom";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import IconButton from "@mui/material/IconButton";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from '../../firebase';
-import {Container, Row, Col, Image} from "react-bootstrap"
+import { auth } from "../../firebase";
 import Login from "../AUTH/Login";
 import Button from "@mui/material/Button";
 import ButtonGroup from '@mui/material/ButtonGroup';
@@ -13,20 +10,23 @@ import { styled } from '@mui/material/styles';
 import { Typography, Grid } from '@mui/material';
 
 
-import {  signOut } from "firebase/auth";
-import { useNavigate } from 'react-router-dom';
+import { signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 const HOME = () => {
   const [newTeacherName, setNewTeacherName] = useState("");
   const navigate = useNavigate();
- 
-    const handleLogout = () => {               
-        signOut(auth).then(() => {
+
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
         // Sign-out successful.
-            navigate("/");
-            console.log("Signed out successfully")
-        }).catch((error) => {
+        navigate("/");
+        console.log("Signed out successfully");
+      })
+      .catch((error) => {
         // An error happened.
+
         });
     }
  
@@ -100,15 +100,11 @@ return (
       </div>
     </div>
   </div>
-    {/* <Button color="secondary" onClick={handleLogout}>Logout</Button> */}
-    {/* <LogoutButton variant="contained" onClick={handleLogout}> Logout</LogoutButton> */}
-
     <div style={{
       display: "flex",
       justifyContent: "center",
       marginTop: "20px",
     }}>
-      {/* <ButtonGroup variant="contained" aria-label="outlined button group"> */}
         <Link to="/overall_dashboard" style={{ marginRight: "10px" }}>
           <Button color="primary" variant="contained"  >Dashboard</Button>
         </Link>
@@ -121,7 +117,6 @@ return (
         <Link to="/calendar" style={{ marginRight: "10px" }}>
           <Button color="primary"  variant="contained" >Calendar</Button>
         </Link>
-      {/* </ButtonGroup> */}
     </div>
 
   </div>
@@ -135,6 +130,6 @@ return (
       </div>
       )
     }
-    }
+}
 
 export default HOME;

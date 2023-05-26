@@ -4,24 +4,24 @@ import { db } from "../../firebase.js";
 import { getDocs, collection, getDoc, doc } from "firebase/firestore";
 import Button from "@mui/material/Button";
 import { ButtonGroup } from "@mui/material";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from '../../firebase';
-import Login from "../AUTH/Login";
-import {  signOut } from "firebase/auth";
+import { auth } from "../../firebase";
+import { signOut } from "firebase/auth";
 
 function TEACHER_DASHBOARD() {
   const [classList, setClassList] = useState([]);
   const navigate = useNavigate();
- 
-    const handleLogout = () => {               
-        signOut(auth).then(() => {
+
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
         // Sign-out successful.
-            navigate("/");
-            console.log("Signed out successfully")
-        }).catch((error) => {
+        navigate("/");
+        console.log("Signed out successfully");
+      })
+      .catch((error) => {
         // An error happened.
-        });
-    }
+      });
+  };
 
   const { teacherID } = useParams();
 

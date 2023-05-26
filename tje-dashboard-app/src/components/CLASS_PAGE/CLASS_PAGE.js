@@ -11,27 +11,28 @@ import {
 import { db } from "../../firebase.js";
 import { useEffect, useState } from "react";
 import MenuItem from "@mui/material/MenuItem";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from '../../firebase';
+import { auth } from "../../firebase";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
-import {  signOut } from "firebase/auth";
+import { signOut } from "firebase/auth";
 
 function CLASS_PAGE() {
   const [change, setChange] = useState(false);
- 
-    const handleLogout = () => {               
-        signOut(auth).then(() => {
+
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
         // Sign-out successful.
-            navigate("/");
-            console.log("Signed out successfully")
-        }).catch((error) => {
+        navigate("/");
+        console.log("Signed out successfully");
+      })
+      .catch((error) => {
         // An error happened.
-        });
-    }
+      });
+  };
 
   const [teacherList, setTeacherList] = useState([]);
 

@@ -18,14 +18,9 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from '../../firebase';
-import {Container, Row, Col, Image} from "react-bootstrap"
-import Login from "../AUTH/Login";
-import { useNavigate } from 'react-router-dom';
-import {  signOut } from "firebase/auth";
-
-
+import { auth } from "../../firebase";
+import { useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
 
 function TEACHER_DIRECTORY() {
   const [teacherList, setTeacherList] = useState([]);
@@ -37,16 +32,18 @@ function TEACHER_DIRECTORY() {
   const [teacherRemoved, setTeacherRemoved] = useState("");
   const [hasClass, setHasClass] = useState(false);
   const navigate = useNavigate();
- 
-    const handleLogout = () => {               
-        signOut(auth).then(() => {
+
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
         // Sign-out successful.
-            navigate("/");
-            console.log("Signed out successfully")
-        }).catch((error) => {
+        navigate("/");
+        console.log("Signed out successfully");
+      })
+      .catch((error) => {
         // An error happened.
-        });
-    }
+      });
+  };
 
   useEffect(() => {
     const getTeacherList = async () => {

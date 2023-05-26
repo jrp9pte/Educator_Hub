@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home.js";
 //import Signup from './page/Signup';
 //import Login from './page/Login';
-import Login from './components/AUTH/Login'
+import Login from "./components/AUTH/Login";
 import Dashboard from "./pages/Dashboard.js";
 import Calendar from "./pages/Calendar.js";
 import StudentDirectory from "./pages/StudentDirectory.js";
@@ -12,6 +12,7 @@ import TeacherDashboard from "./pages/TeacherDashboard.js";
 import ClassPage from "./pages/ClassPage.js";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import Button from "@mui/material/Button";
 
 const darkTheme = createTheme({
   palette: {
@@ -22,7 +23,6 @@ const darkTheme = createTheme({
     secondary: {
       main: "#f50057", // Customize the secondary color
     },
-
   },
 });
 
@@ -65,7 +65,9 @@ function App() {
                   >
                     Page Not Found
                   </h1>
-                  <Link to="/Home">Home Page</Link>
+                  <Link to="/Home">
+                    <Button variant="contained">Home Page</Button>
+                  </Link>
                 </div>
               }
             />
