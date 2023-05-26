@@ -21,6 +21,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { auth } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
+import { color } from "@mui/system";
 
 function TEACHER_DIRECTORY() {
   const [teacherList, setTeacherList] = useState([]);
@@ -126,174 +127,185 @@ function TEACHER_DIRECTORY() {
     }
   }
 
-  
-
   return (
-      <div
-        style={{ textAlign: "center", paddingBottom: "100px", padding: "10px" }}
+    <div
+      style={{ textAlign: "center", paddingBottom: "100px", padding: "10px" }}
+    >
+      <h1>Teacher Directory</h1>
+      <Link to="/Home">
+        <Button variant="contained">Home</Button>
+      </Link>
+      <Button
+        variant="contained"
+        style={{ margin: "10px", color: "white", background: "red" }}
+        onClick={handleLogout}
       >
-        <h1>Teacher Directory</h1>
-        <Link to="/Home">
-          <Button variant="contained">Home</Button>
-        </Link>
-        <button onClick={handleLogout}>Logout</button>
-        <br></br>
-        <br></br>
-        <div>
-          {teacherList.map((teacher) => (
-            <div key={teacher.id}>
-              <Link to={"/teacher_dashboard/" + teacher.id}>
-                <Button className="choices" variant="outlined">
-                  {teacher.name}
-                </Button>
-              </Link>
-              <br></br>
-              <br></br>
+        Logout
+      </Button>
+      <header>
+        <h2>Edit a Teacher </h2>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr 1fr",
+            justifyContent: "center",
+          }}
+        >
+          <div>
+            <h4> Add a Teacher</h4>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <TextField
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+                label="Teacher Name"
+                variant="outlined"
+                sx={{ width: 225 }}
+              />
             </div>
-          ))}
-        </div>
-        <footer>
-          <h2>Edit a Teacher </h2>
-
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr 1fr",
-              justifyContent: "center",
-            }}
-          >
-            <div>
-              <h4> Add a Teacher</h4>
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <TextField
-                  value={newName}
-                  onChange={(e) => setNewName(e.target.value)}
-                  label="Teacher Name"
-                  variant="outlined"
-                  sx={{ width: 225 }}
-                />
-              </div>
-              <br></br>
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <div>
-                  <Button
-                    className="choices"
-                    variant="contained"
-                    onClick={() => {
-                      addNewTeacher(newName);
-                      setChange(!change);
-                    }}
-                  >
-                    Add New Teacher
-                  </Button>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h4> Change Teacher Name</h4>
-
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <Box
-                  sx={{
-                    width: 225,
-                    // backgroundColor: "white"
-                  }}
-                >
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">
-                      Name to Change
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={prevName}
-                      label="Previous Name"
-                      onChange={(e) => setPrevName(e.target.value)}
-                    >
-                      {teacherList.map((teacher) => (
-                        <MenuItem key={teacher.id} value={teacher.name}>
-                          {" "}
-                          {teacher.name}{" "}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Box>
-              </div>
-              <br></br>
+            <br></br>
+            <div style={{ display: "flex", justifyContent: "center" }}>
               <div>
-                <TextField
-                  value={editedName}
-                  onChange={(e) => setEditedName(e.target.value)}
-                  label="Edited Name"
-                  variant="outlined"
-                  sx={{
-                    width: 225,
-                    // backgroundColor: "white"
-                  }}
-                />
-              </div>
-              <br></br>
-              <Button
-                variant="contained"
-                onClick={() => {
-                  changeTeacherName(prevName, editedName);
-                  setChange(!change);
-                }}
-              >
-                Save Changes
-              </Button>
-            </div>
-            {/* ________________________ */}
-            <div>
-              <h4> Delete a Teacher </h4>
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <Box
-                  sx={{
-                    width: 225,
-                    // backgroundColor: "white"
+                <Button
+                  className="choices"
+                  variant="contained"
+                  onClick={() => {
+                    addNewTeacher(newName);
+                    setChange(!change);
                   }}
                 >
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">
-                      Teacher to Delete
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={teacherRemoved}
-                      label="Teacher to delete"
-                      onChange={(e) => setTeacherRemoved(e.target.value)}
-                    >
-                      {teacherList.map((teacher) => (
-                        <MenuItem key={teacher.id} value={teacher.name}>
-                          {" "}
-                          {teacher.name}{" "}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Box>
+                  Add New Teacher
+                </Button>
               </div>
-              <br></br>
-              <Button
-                variant="contained"
-                onClick={() => {
-                  deleteTeacher(teacherRemoved);
-                  setChange(!change);
-                }}
-              >
-                Remove Teacher
-              </Button>
-              <br></br>
             </div>
           </div>
-          {hasClass ? (
-            <p>Please delete the class before deleting the assigned teacher.</p>
-          ) : null}
-        </footer>
+
+          <div>
+            <h4 style={{ marginTop: "0px" }}> Change Teacher Name</h4>
+
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <Box
+                sx={{
+                  width: 225,
+                  // backgroundColor: "white"
+                }}
+              >
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">
+                    Name to Change
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={prevName}
+                    label="Previous Name"
+                    onChange={(e) => setPrevName(e.target.value)}
+                  >
+                    {teacherList.map((teacher) => (
+                      <MenuItem key={teacher.id} value={teacher.name}>
+                        {" "}
+                        {teacher.name}{" "}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
+            </div>
+            <br></br>
+            <div>
+              <TextField
+                value={editedName}
+                onChange={(e) => setEditedName(e.target.value)}
+                label="Edited Name"
+                variant="outlined"
+                sx={{
+                  width: 225,
+                  // backgroundColor: "white"
+                }}
+              />
+            </div>
+            <br></br>
+            <Button
+              variant="contained"
+              onClick={() => {
+                changeTeacherName(prevName, editedName);
+                setChange(!change);
+              }}
+            >
+              Save Changes
+            </Button>
+          </div>
+          {/* ________________________ */}
+          <div>
+            <h4> Delete a Teacher </h4>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <Box
+                sx={{
+                  width: 225,
+                  // backgroundColor: "white"
+                }}
+              >
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">
+                    Teacher to Delete
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={teacherRemoved}
+                    label="Teacher to delete"
+                    onChange={(e) => setTeacherRemoved(e.target.value)}
+                  >
+                    {teacherList.map((teacher) => (
+                      <MenuItem key={teacher.id} value={teacher.name}>
+                        {" "}
+                        {teacher.name}{" "}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
+            </div>
+            <br></br>
+            <Button
+              variant="contained"
+              onClick={() => {
+                deleteTeacher(teacherRemoved);
+                setChange(!change);
+              }}
+            >
+              Remove Teacher
+            </Button>
+            <br></br>
+          </div>
+        </div>
+        {hasClass ? (
+          <p>Please delete the class before deleting the assigned teacher.</p>
+        ) : null}
+      </header>
+      <h2>Current Teachers</h2>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(2, 1fr)",
+          gap: "20px",
+          paddingRight: "600px",
+          paddingLeft: "600px",
+        }}
+      >
+        {teacherList.map((teacher) => (
+          <div key={teacher.id}>
+            <Link to={"/teacher_dashboard/" + teacher.id}>
+              <Button className="choices" variant="outlined">
+                {teacher.name}
+              </Button>
+            </Link>
+            <br />
+            <br />
+          </div>
+        ))}
       </div>
+    </div>
   );
 }
 

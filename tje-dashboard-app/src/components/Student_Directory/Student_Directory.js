@@ -27,15 +27,21 @@ import { auth } from "../../firebase";
 
 async function addNewStudent(studentName, studentAge, sClass, allClass) {
   let classInfo = [];
+
   for (let i = 0; i < sClass.length; i++) {
     const classCollectionRef = collection(db, "Classes");
     const classQuery = query(
       classCollectionRef,
-      where("name", "==", GetClass(allClass, GetClassId(allClass, sClass[i])))
+      where("name", "==", sClass[i])
     );
     const classSnapshot = await getDocs(classQuery);
-    let classRef = doc(db, "Classes", classSnapshot.docs[0].id);
-    classInfo.push({ class: classRef, grade: -1 });
+
+    if (classSnapshot.docs.length > 0) {
+      const classRef = doc(db, "Classes", classSnapshot.docs[0].id);
+      classInfo.push({ class: classRef, grade: -1 });
+    } else {
+      console.log("Class not found for:", sClass[i]);
+    }
   }
 
   await addDoc(collection(db, "Students"), {
@@ -43,7 +49,6 @@ async function addNewStudent(studentName, studentAge, sClass, allClass) {
     age: studentAge,
     classesTaken: classInfo,
   });
-
 }
 
 async function removeStudent(allStudent, studentToRemove) {
@@ -74,7 +79,7 @@ function GetClass(classes, id) {
     .filter((cla) => cla.id === id)
     .map((filteredClass) => (className = filteredClass.name));
 
-  return className;
+  return className.charAt(0).toUpperCase() + className.slice(1);
 }
 
 function GetClassId(classes, className) {
@@ -91,7 +96,7 @@ function Student_Directory() {
   const [studentList, setStudentList] = useState([]);
   const [classList, setClassList] = useState([]);
   const [studentName, setStudentName] = useState("");
-  const [studentAge, setStudentAge] = useState(0);
+  const [studentAge, setStudentAge] = useState("");
   const [studentAdded, setStudentAdded] = useState(false);
   const [studentClass, setStudentClass] = useState([]);
   const [remStudent, setRemStudent] = useState("");
@@ -100,7 +105,6 @@ function Student_Directory() {
   const [newAge, setNewAge] = useState("");
   const [studentToEdit, setStudentToEdit] = useState("");
   const [studentEdited, setStudentEdited] = useState(false);
-
 
   // Handle multiple select
   const handleChange = (event) => {
@@ -153,6 +157,7 @@ function Student_Directory() {
           ...doc.data(),
           id: doc.id,
         }));
+        console.log(filteredData);
         setStudentList(filteredData);
       } catch (err) {
         console.log(err);
@@ -160,8 +165,6 @@ function Student_Directory() {
     };
     getStudentList();
   }, [studentAdded, studentRemoved, studentEdited]);
-
-
 
   return (
     <div style={{ textAlign: "center" }}>
@@ -228,25 +231,29 @@ function Student_Directory() {
               </div>
               <br></br>
               <div>
-              <Button
-                variant="outlined"
-                onClick={() => {
-                  if (studentName !== "" && studentAge !== "" && studentClass !== []) {
-                    addNewStudent(
-                      studentName,
-                      studentAge,
-                      studentClass,
-                      classList
-                    );
-                    setStudentName("");
-                    setStudentAge("");
-                    setStudentClass([]);
-                  }
-                  setStudentAdded(!studentAdded);
-                }}
-              >
-                Add New Student
-              </Button>
+                <Button
+                  variant="outlined"
+                  onClick={() => {
+                    if (
+                      studentName !== "" &&
+                      studentAge !== "" &&
+                      studentClass !== []
+                    ) {
+                      addNewStudent(
+                        studentName,
+                        studentAge,
+                        studentClass,
+                        classList
+                      );
+                      setStudentName("");
+                      setStudentAge("");
+                      setStudentClass([]);
+                      setStudentAdded(!studentAdded);
+                    }
+                  }}
+                >
+                  Add New Student
+                </Button>
               </div>
             </div>
           </div>
@@ -288,6 +295,7 @@ function Student_Directory() {
                     if (remStudent !== "") {
                       removeStudent(studentList, remStudent);
                       setStudentRemoved(!studentRemoved);
+                      setRemStudent("");
                     }
                   }}
                 >
@@ -351,6 +359,10 @@ function Student_Directory() {
                       editStudent(studentList, newName, newAge, studentToEdit);
                       setStudentEdited(!studentEdited);
                     }
+                    setStudentToEdit("");
+                    setNewName("");
+                    setNewAge("");
+                    setStudentEdited(!studentEdited);
                   }}
                 >
                   Edit student information
@@ -361,27 +373,48 @@ function Student_Directory() {
         </div>
       </header>
       <br></br>
-      <Box sx={{ minWidth: 275 }}>
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: "repeat(2, 1fr)",
+          gap: 2,
+          justifyContent: "center",
+          paddingRight: "350px",
+          paddingLeft: "350px",
+        }}
+      >
         {studentList.map((data) => (
-          <div key={data.id}>
-            <Card variant="outlined">
-              <React.Fragment>
-                <CardContent>
-                  <Typography sx={{ fontSize: 16 }} gutterBottom>
-                    {data.name}, Age: {data.age}
+          <div
+            style={{
+              textAlign: "center",
+              paddingBottom: "100px",
+              padding: "10px",
+              justifyContent: "center",
+              display: "flex",
+            }}
+          >
+            <Card key={data.id} variant="outlined" sx={{ minWidth: 400 }}>
+              <CardContent>
+                <Typography
+                  variant="h6"
+                  component="div"
+                  sx={{ fontWeight: "bold" }}
+                >
+                  {data.name}
+                </Typography>
+                <Typography variant="body1" sx={{ mt: 1 }}>
+                  <strong>Age:</strong> {data.age}
+                </Typography>
+                <Typography variant="body1" sx={{ mt: 2, fontWeight: "bold" }}>
+                  Classes Taken:
+                </Typography>
+                {data.classesTaken.map((c) => (
+                  <Typography key={c.id} variant="body2" sx={{ ml: 2 }}>
+                    {GetClass(classList, c.class.id)}
                   </Typography>
-                  <br></br>
-                  <Typography sx={{ fontSize: 14 }}>
-                    Classes Taken:
-                    {data.classesTaken.map((c) => (
-                      <div key={c.id}>{GetClass(classList, c.class.id)}</div>
-                    ))}
-                  </Typography>
-                  <br></br>
-                </CardContent>
-              </React.Fragment>
+                ))}
+              </CardContent>
             </Card>
-            <br></br>
           </div>
         ))}
       </Box>
