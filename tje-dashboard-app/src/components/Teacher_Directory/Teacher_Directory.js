@@ -234,8 +234,27 @@ function TEACHER_DIRECTORY() {
             >
               Save Changes
             </Button>
+            <h2>Current Teachers</h2>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, 1fr)",
+                gap: "20px",
+              }}
+            >
+              {teacherList.map((teacher) => (
+                <div key={teacher.id}>
+                  <Link to={"/teacher_dashboard/" + teacher.id}>
+                    <Button className="choices" variant="outlined">
+                      {teacher.name}
+                    </Button>
+                  </Link>
+                  <br />
+                  <br />
+                </div>
+              ))}
+            </div>
           </div>
-          {/* ________________________ */}
           <div>
             <h4> Delete a Teacher </h4>
             <div style={{ display: "flex", justifyContent: "center" }}>
@@ -277,34 +296,14 @@ function TEACHER_DIRECTORY() {
               Remove Teacher
             </Button>
             <br></br>
+            {hasClass ? (
+              <p>
+                Please delete the class before deleting the assigned teacher.
+              </p>
+            ) : null}
           </div>
         </div>
-        {hasClass ? (
-          <p>Please delete the class before deleting the assigned teacher.</p>
-        ) : null}
       </header>
-      <h2>Current Teachers</h2>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(2, 1fr)",
-          gap: "20px",
-          paddingRight: "600px",
-          paddingLeft: "600px",
-        }}
-      >
-        {teacherList.map((teacher) => (
-          <div key={teacher.id}>
-            <Link to={"/teacher_dashboard/" + teacher.id}>
-              <Button className="choices" variant="outlined">
-                {teacher.name}
-              </Button>
-            </Link>
-            <br />
-            <br />
-          </div>
-        ))}
-      </div>
     </div>
   );
 }
